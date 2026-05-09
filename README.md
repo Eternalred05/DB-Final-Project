@@ -8,7 +8,7 @@ This is a school project made for learning, any fix, idea or way to make it bett
 ### 3. For reading .form files and modify GUI more comfortably Netbeans 23 or newer (https://netbeans.apache.org/front/main/download/)
 
 # How to use
-### After all necessary programs are installed, create a database called Gestion-Hospitalaria in PGAdmin 4, the copy run the .sql file included in the root of the project via Query Tool to create all the necessary tables
+### After all necessary programs are installed, create a database called Gestion-Hospitalaria in PGAdmin 4, then copy and run the .sql file included in the root of the project via Query Tool to create all the necessary tables.
 ### Go to src\Connection\configuracion.properties and edit both the password, user and port to connect the Database to java, Database name can also be changed as well, there is a class called `TestConexion.java` you can always run that to check wether the changes are right.
 ### Simply run the class at Runner package to start the program
 
