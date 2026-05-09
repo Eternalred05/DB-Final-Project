@@ -4,6 +4,13 @@
  */
 package GUI;
 
+import DAO.DepartamentoDAO;
+import DAO.HospitalDAO;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
+import Logic.*;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Alexandro
@@ -16,6 +23,23 @@ public class AddDpt extends javax.swing.JDialog {
     public AddDpt(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setTitle("Añadir Departamento al Sistema");
+        addHospitals();
+
+    }
+
+    private void addHospitals() {
+        HospitalDAO dao = new HospitalDAO();
+        try {
+            ArrayList<Hospital> hospitales = dao.listarHospitales();
+            DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
+            for (Hospital h : hospitales) {
+                modelo.addElement(h.getName() + " -- " + h.getId());
+            }
+            comboHospital.setModel(modelo);
+        } catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error al llenar el ComboBox", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -29,10 +53,10 @@ public class AddDpt extends javax.swing.JDialog {
 
         label1 = new java.awt.Label();
         jLabel1 = new javax.swing.JLabel();
-        jTextFieldEdited2 = new Utils.JTextFieldEdited();
+        nameField = new Utils.JTextFieldEdited();
         jLabel2 = new javax.swing.JLabel();
-        jTextFieldEdited1 = new Utils.JTextFieldEdited();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        idField = new Utils.JTextFieldEdited();
+        comboHospital = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
@@ -44,28 +68,28 @@ public class AddDpt extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel1.setText("Nombre");
 
-        jTextFieldEdited2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jTextFieldEdited2.addActionListener(new java.awt.event.ActionListener() {
+        nameField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        nameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldEdited2ActionPerformed(evt);
+                nameFieldActionPerformed(evt);
             }
         });
 
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel2.setText("Seleccione el Hospital a Añadir el Departamento");
 
-        jTextFieldEdited1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jTextFieldEdited1.setLimit(10);
-        jTextFieldEdited1.addActionListener(new java.awt.event.ActionListener() {
+        idField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        idField.setLimit(10);
+        idField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldEdited1ActionPerformed(evt);
+                idFieldActionPerformed(evt);
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        comboHospital.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
+        comboHospital.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                comboHospitalActionPerformed(evt);
             }
         });
 
@@ -90,12 +114,12 @@ public class AddDpt extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(263, 263, 263)
-                        .addComponent(jTextFieldEdited1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(157, 157, 157)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldEdited2, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(312, 312, 312)
@@ -104,8 +128,8 @@ public class AddDpt extends javax.swing.JDialog {
                         .addGap(323, 323, 323)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(266, 266, 266)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(223, 223, 223)
+                        .addComponent(comboHospital, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(166, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -116,16 +140,16 @@ public class AddDpt extends javax.swing.JDialog {
                 .addGap(49, 49, 49)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldEdited2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldEdited1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(38, 38, 38)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(113, 113, 113)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(comboHospital, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(119, 119, 119)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -133,21 +157,44 @@ public class AddDpt extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextFieldEdited2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldEdited2ActionPerformed
+    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldEdited2ActionPerformed
+    }//GEN-LAST:event_nameFieldActionPerformed
 
-    private void jTextFieldEdited1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldEdited1ActionPerformed
+    private void idFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldEdited1ActionPerformed
+    }//GEN-LAST:event_idFieldActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void comboHospitalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboHospitalActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_comboHospitalActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String Name = jTextFieldEdited1.getText();
-        String id = jTextFieldEdited2.getText();
+        int index = comboHospital.getSelectedIndex();
+        String nomDpt = nameField.getText();
+        String codDpt = idField.getText();
+        String codHosp = "";
+        if (!nomDpt.isEmpty() && !codDpt.isEmpty()) {
+            if (index != -1) {
+
+                try {
+                    DepartamentoDAO data = new DepartamentoDAO();
+                    HospitalDAO dataH = new HospitalDAO();
+                    codHosp = dataH.obtenerHospitalPorPosicion(index).getId();
+                    data.insertarDepartamento(codDpt, nomDpt, codHosp);
+                    JOptionPane.showMessageDialog(null, "Departamento Insertado Correctamente", "La inserción del Departamento fue correcta", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error al ingresar", JOptionPane.ERROR_MESSAGE);
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Seleccione un Hospital primero.", "Ha dejado una selección en blanco.", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Termine de Ingresar los datos.", "Ha dejado una selección en blanco.", JOptionPane.ERROR_MESSAGE);
+
+        }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -176,8 +223,6 @@ public class AddDpt extends javax.swing.JDialog {
             java.util.logging.Logger.getLogger(AddDpt.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
-        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 AddDpt dialog = new AddDpt(new javax.swing.JFrame(), true);
@@ -193,13 +238,13 @@ public class AddDpt extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> comboHospital;
+    private Utils.JTextFieldEdited idField;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private Utils.JTextFieldEdited jTextFieldEdited1;
-    private Utils.JTextFieldEdited jTextFieldEdited2;
     private java.awt.Label label1;
+    private Utils.JTextFieldEdited nameField;
     // End of variables declaration//GEN-END:variables
 }

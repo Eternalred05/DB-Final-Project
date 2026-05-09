@@ -4,18 +4,39 @@
  */
 package GUI;
 
+import DAO.DepartamentoDAO;
+import DAO.UnidadDAO;
+import javax.swing.DefaultComboBoxModel;
+import Logic.*;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Alexandro
  */
 public class AddUnidad extends javax.swing.JDialog {
-
-    /**
-     * Creates new form AddUnidad
-     */
+    
     public AddUnidad(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setTitle("Añadir Unidad al Sistema");
+        addDpts();
+        dptCBox.setSelectedItem("");
+    }
+    
+    private void addDpts() {
+        DepartamentoDAO dao = new DepartamentoDAO();
+        try {
+            ArrayList<Departamento> v = dao.listarDpt();
+            DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
+            for (Departamento d : v) {
+                modelo.addElement(d.getName() + " -- " + d.getId());
+            }
+            dptCBox.setModel(modelo);
+        } catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error al llenar el ComboBox", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -29,13 +50,13 @@ public class AddUnidad extends javax.swing.JDialog {
 
         label1 = new java.awt.Label();
         jLabel1 = new javax.swing.JLabel();
-        jTextFieldEdited2 = new Utils.JTextFieldEdited();
+        nameField = new Utils.JTextFieldEdited();
         jLabel3 = new javax.swing.JLabel();
-        jTextFieldEdited1 = new Utils.JTextFieldEdited();
+        idField = new Utils.JTextFieldEdited();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        dptCBox = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
-        jTextFieldEdited3 = new Utils.JTextFieldEdited();
+        addField = new Utils.JTextFieldEdited();
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -46,31 +67,31 @@ public class AddUnidad extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel1.setText("Nombre");
 
-        jTextFieldEdited2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jTextFieldEdited2.addActionListener(new java.awt.event.ActionListener() {
+        nameField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        nameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldEdited2ActionPerformed(evt);
+                nameFieldActionPerformed(evt);
             }
         });
 
         jLabel3.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel3.setText("Identificador");
 
-        jTextFieldEdited1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jTextFieldEdited1.setLimit(10);
-        jTextFieldEdited1.addActionListener(new java.awt.event.ActionListener() {
+        idField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        idField.setLimit(10);
+        idField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldEdited1ActionPerformed(evt);
+                idFieldActionPerformed(evt);
             }
         });
 
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel2.setText("Seleccione el Departamento a Añadir la Unidad");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        dptCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
+        dptCBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                dptCBoxActionPerformed(evt);
             }
         });
 
@@ -81,10 +102,10 @@ public class AddUnidad extends javax.swing.JDialog {
             }
         });
 
-        jTextFieldEdited3.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jTextFieldEdited3.addActionListener(new java.awt.event.ActionListener() {
+        addField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        addField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldEdited3ActionPerformed(evt);
+                addFieldActionPerformed(evt);
             }
         });
 
@@ -105,12 +126,12 @@ public class AddUnidad extends javax.swing.JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(157, 157, 157)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextFieldEdited2, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(21, 21, 21))
                                     .addComponent(jLabel2)
-                                    .addComponent(jTextFieldEdited3, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(addField, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(323, 323, 323)
                                 .addComponent(jLabel1))
@@ -119,16 +140,15 @@ public class AddUnidad extends javax.swing.JDialog {
                                 .addComponent(jLabel3))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(257, 257, 257)
-                                .addComponent(jTextFieldEdited1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(267, 267, 267)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(263, 263, 263)
+                                .addComponent(jLabel4))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(205, 205, 205)
+                                .addComponent(dptCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 162, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(263, 263, 263)
-                .addComponent(jLabel4)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,19 +158,19 @@ public class AddUnidad extends javax.swing.JDialog {
                 .addGap(53, 53, 53)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldEdited2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextFieldEdited3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(addField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldEdited1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(dptCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(66, 66, 66)
                 .addComponent(jButton1)
                 .addContainerGap())
@@ -159,26 +179,52 @@ public class AddUnidad extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextFieldEdited2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldEdited2ActionPerformed
+    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldEdited2ActionPerformed
+    }//GEN-LAST:event_nameFieldActionPerformed
 
-    private void jTextFieldEdited1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldEdited1ActionPerformed
+    private void idFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldEdited1ActionPerformed
+    }//GEN-LAST:event_idFieldActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void dptCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dptCBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_dptCBoxActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String Name = jTextFieldEdited1.getText();
-        String id = jTextFieldEdited2.getText();
+        
+        int index = dptCBox.getSelectedIndex();
+        String nomUnidad = nameField.getText();
+        String codUnidad = idField.getText();
+        String ub = addField.getText();
+        String codDpt = "";
+        if (!nomUnidad.isEmpty() && !codUnidad.isEmpty() && !ub.isEmpty()) {
+            if (index != -1) {
+                
+                try {
+                    UnidadDAO data = new UnidadDAO();
+                    DepartamentoDAO dataH = new DepartamentoDAO();
+                    codDpt = dataH.obtenerDptPorPosicion(index).getId();
+                    data.insertarUnidad(codUnidad, nomUnidad, ub, codDpt);
+                    JOptionPane.showMessageDialog(null, "Unidad Insertada Correctamente", "La inserción de la Unidad fue correcta", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error al ingresar", JOptionPane.ERROR_MESSAGE);
+                }
+                
+            } else {
+                JOptionPane.showMessageDialog(null, "Seleccione un Departamento primero.", "Ha dejado una selección en blanco.", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Termine de Ingresar los datos.", "Ha dejado una selección en blanco.", JOptionPane.ERROR_MESSAGE);
+            
+        }
+        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jTextFieldEdited3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldEdited3ActionPerformed
+    private void addFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldEdited3ActionPerformed
+    }//GEN-LAST:event_addFieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -223,15 +269,15 @@ public class AddUnidad extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private Utils.JTextFieldEdited addField;
+    private javax.swing.JComboBox<String> dptCBox;
+    private Utils.JTextFieldEdited idField;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private Utils.JTextFieldEdited jTextFieldEdited1;
-    private Utils.JTextFieldEdited jTextFieldEdited2;
-    private Utils.JTextFieldEdited jTextFieldEdited3;
     private java.awt.Label label1;
+    private Utils.JTextFieldEdited nameField;
     // End of variables declaration//GEN-END:variables
 }

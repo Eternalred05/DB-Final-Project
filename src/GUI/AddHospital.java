@@ -16,6 +16,7 @@ public class AddHospital extends javax.swing.JDialog {
     public AddHospital(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setTitle("Añadir Hospital al Sistema");
     }
 
     @SuppressWarnings("unchecked")
