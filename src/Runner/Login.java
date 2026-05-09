@@ -4,6 +4,7 @@
  */
 package Runner;
 
+import GUI.MainMenu;
 import java.awt.event.ItemEvent;
 
 /**
@@ -120,7 +121,13 @@ public class Login extends javax.swing.JFrame {
     private void accessButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accessButtonActionPerformed
         String password = passwordField.getText();
         String user = userField.getText();
-
+        
+        MainMenu menu = new MainMenu();
+        menu.setVisible(true);
+        this.dispose();
+        
+        
+        
 
     }//GEN-LAST:event_accessButtonActionPerformed
 
