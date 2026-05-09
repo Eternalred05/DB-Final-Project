@@ -16,4 +16,4 @@ This is a school project made for learning, any fix, idea or way to make it bett
 This is a database final project made for CUJAE University, for the theme Hospitalary Management in Software Engineering Faculty. For Connecting The DB JBDC Drivers 42.7.11 are being used (https://jdbc.postgresql.org/download/)
 
 # Building
-If you want to manually compile it, simply use the -javac command and compile from there or from the IDE itself
+If you want to manually compile it, check nbproject\build-impl.xml, at least ant 1.8.0 is required.
