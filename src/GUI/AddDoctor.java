@@ -4,6 +4,13 @@
  */
 package GUI;
 
+import DAO.DoctorDAO;
+import DAO.UnidadDAO;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
+import Logic.Unidad;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Alexandro
@@ -16,6 +23,21 @@ public class AddDoctor extends javax.swing.JDialog {
     public AddDoctor(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        addUnities();
+    }
+
+    private void addUnities() {
+        UnidadDAO dao = new UnidadDAO();
+        try {
+            ArrayList<Unidad> unidades = dao.listarUnidades();
+            DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
+            for (Unidad h : unidades) {
+                modelo.addElement(h.getName() + " -- " + h.getId());
+            }
+            UBox.setModel(modelo);
+        } catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error al llenar el ComboBox", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -27,60 +49,65 @@ public class AddDoctor extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jComboBox1 = new javax.swing.JComboBox<>();
+        UBox = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
-        jTextFieldEdited1 = new Utils.JTextFieldEdited();
+        idField = new Utils.JTextFieldEdited();
         jLabel3 = new javax.swing.JLabel();
-        tel = new Utils.JTextFieldEdited();
+        telField = new Utils.JTextFieldEdited();
         jLabel4 = new javax.swing.JLabel();
-        name = new Utils.JTextFieldEdited();
+        nameField = new Utils.JTextFieldEdited();
         jLabel1 = new javax.swing.JLabel();
         label1 = new java.awt.Label();
-        esp = new Utils.JTextFieldEdited();
+        espField = new Utils.JTextFieldEdited();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        license = new Utils.JTextFieldEdited();
-        jSpinner1 = new javax.swing.JSpinner();
+        licenseField = new Utils.JTextFieldEdited();
+        spinnerExp = new javax.swing.JSpinner();
         jLabel7 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        UBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
+        UBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                UBoxActionPerformed(evt);
             }
         });
 
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jLabel2.setText("Seleccione a que departamento asignarle");
+        jLabel2.setText("Seleccione a que Unidad asignarle");
 
-        jTextFieldEdited1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jTextFieldEdited1.setLimit(10);
-        jTextFieldEdited1.addActionListener(new java.awt.event.ActionListener() {
+        idField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        idField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        idField.setLimit(11);
+        idField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldEdited1ActionPerformed(evt);
+                idFieldActionPerformed(evt);
             }
         });
 
         jLabel3.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel3.setText("Identificador");
 
-        tel.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        tel.addActionListener(new java.awt.event.ActionListener() {
+        telField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        telField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        telField.setLimit(8);
+        telField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                telActionPerformed(evt);
+                telFieldActionPerformed(evt);
             }
         });
 
         jLabel4.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel4.setText("Teléfono");
 
-        name.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        name.addActionListener(new java.awt.event.ActionListener() {
+        nameField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        nameField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        nameField.setLimit(30);
+        nameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nameActionPerformed(evt);
+                nameFieldActionPerformed(evt);
             }
         });
 
@@ -90,10 +117,12 @@ public class AddDoctor extends javax.swing.JDialog {
         label1.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         label1.setText("Ingrese los Datos del Doctor");
 
-        esp.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        esp.addActionListener(new java.awt.event.ActionListener() {
+        espField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        espField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        espField.setLimit(20);
+        espField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                espActionPerformed(evt);
+                espFieldActionPerformed(evt);
             }
         });
 
@@ -103,18 +132,20 @@ public class AddDoctor extends javax.swing.JDialog {
         jLabel6.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel6.setText("Número de Licencia");
 
-        license.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        license.addActionListener(new java.awt.event.ActionListener() {
+        licenseField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        licenseField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        licenseField.setLimit(10);
+        licenseField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                licenseActionPerformed(evt);
+                licenseFieldActionPerformed(evt);
             }
         });
 
-        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(0, 0, 720, 1));
-        jSpinner1.setName(""); // NOI18N
+        spinnerExp.setModel(new javax.swing.SpinnerNumberModel(0, 0, 60, 1));
+        spinnerExp.setName(""); // NOI18N
 
         jLabel7.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jLabel7.setText("Meses de Experiencia");
+        jLabel7.setText("Años de Experiencia");
 
         jButton1.setText("Añadir");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -149,29 +180,28 @@ public class AddDoctor extends javax.swing.JDialog {
                         .addComponent(jLabel3))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(250, 250, 250)
-                        .addComponent(jTextFieldEdited1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(154, 154, 154)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tel, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(esp, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(license, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(telField, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(espField, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(licenseField, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(160, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(26, 26, 26)
+                        .addComponent(jLabel2))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE)))
+                        .addGap(56, 56, 56)
+                        .addComponent(UBox, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(spinnerExp, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(58, 58, 58)))
                 .addGap(81, 81, 81))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -187,68 +217,96 @@ public class AddDoctor extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(telField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(esp, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(espField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(license, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(licenseField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldEdited1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(71, 71, 71))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(UBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addComponent(spinnerExp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void UBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_UBoxActionPerformed
 
-    private void jTextFieldEdited1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldEdited1ActionPerformed
+    private void idFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldEdited1ActionPerformed
+    }//GEN-LAST:event_idFieldActionPerformed
 
-    private void telActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_telActionPerformed
+    private void telFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_telFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_telActionPerformed
+    }//GEN-LAST:event_telFieldActionPerformed
 
-    private void nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameActionPerformed
+    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_nameActionPerformed
+    }//GEN-LAST:event_nameFieldActionPerformed
 
-    private void espActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_espActionPerformed
+    private void espFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_espFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_espActionPerformed
+    }//GEN-LAST:event_espFieldActionPerformed
 
-    private void licenseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_licenseActionPerformed
+    private void licenseFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_licenseFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_licenseActionPerformed
+    }//GEN-LAST:event_licenseFieldActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+        int index = UBox.getSelectedIndex();
+        String nomMed = nameField.getText();
+        String codMed = idField.getText();
+        String tel = telField.getText();
+        String esp = espField.getText();
+        String licencia = licenseField.getText();
+        int exp = (Integer)spinnerExp.getValue();
+        String codUnidad = "";
+        if (!nomMed.isEmpty() && !codMed.isEmpty() && !tel.isEmpty() && !esp.isEmpty() && !licencia.isEmpty()) {
+            if (index != -1) {
+                try {
+                    DoctorDAO data = new DoctorDAO();
+                    UnidadDAO dataU = new UnidadDAO();
+                    codUnidad = dataU.obtenerUnidadPorPosicion(index).getId();
+                    data.insertarDoctor(codUnidad, nomMed, codMed, tel, esp, exp, licencia);
+                    JOptionPane.showMessageDialog(null, "Doctor Insertado Correctamente", "La inserción del doctor fue correcta", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "" + e.getMessage(), "Error al ingresar", JOptionPane.ERROR_MESSAGE);
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Seleccione una Unidad primero.", "Ha dejado una selección en blanco.", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No deje de Ingresar todos los datos.", "Ha dejado una selección en blanco.", JOptionPane.ERROR_MESSAGE);
+
+        }
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -295,9 +353,10 @@ public class AddDoctor extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private Utils.JTextFieldEdited esp;
+    private javax.swing.JComboBox<String> UBox;
+    private Utils.JTextFieldEdited espField;
+    private Utils.JTextFieldEdited idField;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -305,11 +364,10 @@ public class AddDoctor extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JSpinner jSpinner1;
-    private Utils.JTextFieldEdited jTextFieldEdited1;
     private java.awt.Label label1;
-    private Utils.JTextFieldEdited license;
-    private Utils.JTextFieldEdited name;
-    private Utils.JTextFieldEdited tel;
+    private Utils.JTextFieldEdited licenseField;
+    private Utils.JTextFieldEdited nameField;
+    private javax.swing.JSpinner spinnerExp;
+    private Utils.JTextFieldEdited telField;
     // End of variables declaration//GEN-END:variables
 }

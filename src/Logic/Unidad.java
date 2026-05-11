@@ -7,23 +7,29 @@ public class Unidad {
     private String name;
     private String id;
     private String location;
-    private Departamento dpt;
-    private ArrayList<Medico> doctors;
-    private ArrayList<Paciente> pacients;
-    private ArrayList<Turno> turns;
-    private ArrayList<Registro> registers;
-    private ArrayList<Informe> informes;
+    private String codDpt;
 
-    public Unidad(String name, String id, String location, Departamento dpt) {
+    public Unidad(String name, String id, String location, String codDpt) {
         this.name = name;
         this.id = id;
         this.location = location;
-        this.dpt = dpt;
-        this.doctors = new ArrayList<>();
-        this.pacients = new ArrayList<>();
-        this.turns = new ArrayList<>();
-        this.registers = new ArrayList<>();
-        this.informes = new ArrayList<>();
+        this.codDpt = codDpt;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getCodDpt() {
+        return codDpt;
     }
 
 }

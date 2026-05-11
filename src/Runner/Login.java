@@ -49,7 +49,7 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(accessButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 380, 90, 40));
 
         passwordField.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
-        passwordField.setLimit(5);
+        passwordField.setLimit(11);
         passwordField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 passwordFieldActionPerformed(evt);

@@ -67,6 +67,7 @@ public class AddUnidad extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel1.setText("Nombre");
 
+        nameField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         nameField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         nameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -77,6 +78,7 @@ public class AddUnidad extends javax.swing.JDialog {
         jLabel3.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel3.setText("Identificador");
 
+        idField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         idField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         idField.setLimit(10);
         idField.addActionListener(new java.awt.event.ActionListener() {
@@ -102,6 +104,7 @@ public class AddUnidad extends javax.swing.JDialog {
             }
         });
 
+        addField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         addField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         addField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
