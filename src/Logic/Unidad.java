@@ -32,4 +32,8 @@ public class Unidad {
         return codDpt;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

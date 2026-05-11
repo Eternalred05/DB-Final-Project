@@ -24,4 +24,9 @@ public class Departamento {
         return idHosp;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
 }

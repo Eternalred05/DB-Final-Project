@@ -25,6 +25,10 @@ public class Hospital {
     public void setId(String id) {
         this.id = id;
     }
-    
+
+    @Override
+    public String toString() {
+        return name;
+    }
 
 }
