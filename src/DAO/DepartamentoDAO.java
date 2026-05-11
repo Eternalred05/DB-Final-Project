@@ -30,7 +30,7 @@ public class DepartamentoDAO {
                 String cod = rs.getString("codDpt");
                 String nom = rs.getString("nombreDpt");
                 String hosp = rs.getString("codHospital");
-                lista.add(new Departamento(nom, cod, nom));
+                lista.add(new Departamento(nom, cod, hosp));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error al listar los departamentos: " + e.getMessage(), e);
