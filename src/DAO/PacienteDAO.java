@@ -104,4 +104,32 @@ public class PacienteDAO {
         return lista;
     }
 
+    public void modificarPaciente(String codUnidad, int numHistClinica, String nombre, String dir,
+            Date fecha, boolean atendido, String causa) {
+        String sql = "SELECT modificar_paciente(?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            stmt.setInt(2, numHistClinica);
+            stmt.setString(3, nombre);
+            stmt.setString(4, dir);
+            stmt.setDate(5, fecha);
+            stmt.setBoolean(6, atendido);
+            stmt.setString(7, causa);
+            stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al modificar paciente: " + e.getMessage(), e);
+        }
+    }
+
+    public void eliminarPaciente(String codUnidad, int numHistClinica) {
+        String sql = "SELECT eliminar_paciente(?, ?)";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            stmt.setInt(2, numHistClinica);
+            stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al eliminar paciente: " + e.getMessage(), e);
+        }
+    }
+
 }

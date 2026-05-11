@@ -57,4 +57,23 @@ public class UnidadDAO {
         return h;
     }
 
+    public ArrayList<Unidad> listarUnidadesPorDepartamento(String codDpt) {
+        ArrayList<Unidad> lista = new ArrayList<>();
+        String sql = "SELECT codUnidad, nombreUnidad, ubicacion, codDpt FROM Unidad WHERE codDpt = ? ORDER BY nombreUnidad";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codDpt);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                lista.add(new Unidad(
+                        rs.getString("nombreUnidad"),
+                        rs.getString("codUnidad"),
+                        rs.getString("ubicacion"),
+                        rs.getString("codDpt")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al listar unidades: " + e.getMessage(), e);
+        }
+        return lista;
+    }
 }

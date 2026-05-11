@@ -53,4 +53,23 @@ public class DepartamentoDAO {
         return h;
     }
 
+    public ArrayList<Departamento> listarDepartamentosPorHospital(String codHospital) {
+        ArrayList<Departamento> lista = new ArrayList<>();
+        String sql = "SELECT codDpt, nombreDpt, codHospital FROM Departamento WHERE codHospital = ? ORDER BY nombreDpt";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codHospital);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                lista.add(new Departamento(
+                        rs.getString("nombreDpt"),
+                        rs.getString("codDpt"),
+                        rs.getString("codHospital")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al listar departamentos por hospital: " + e.getMessage(), e);
+        }
+        return lista;
+    }
+
 }
