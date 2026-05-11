@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Calendar;
 
 /**
  *
@@ -231,13 +232,27 @@ public class AddPaciente extends javax.swing.JDialog {
         String nom = name.getText();
         String codP = id.getText();
         String direccion = dir.getText();
-        Date birth = new Date(jDateChooser.getDate().getYear(), jDateChooser.getDate().getMonth(), jDateChooser.getDate().getDay());
-    //    LocalDate fecha = birth.toLocalDate();
         boolean atend = false;
         String causa = "";
         String codUnidad = "";
+
         if (!nom.isEmpty() && !codP.isEmpty() && !direccion.isEmpty() && jDateChooser.getDate() != null) {
-        //    if (fecha.isBefore(LocalDate.now())) {
+
+            java.util.Date fechaUtil = jDateChooser.getDate();
+            LocalDate fecha;
+            if (fechaUtil instanceof java.sql.Date) {
+                fecha = ((java.sql.Date) fechaUtil).toLocalDate();
+            } else {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(fechaUtil);
+                fecha = LocalDate.of(cal.get(Calendar.YEAR),
+                        cal.get(Calendar.MONTH) + 1,
+                        cal.get(Calendar.DAY_OF_MONTH));
+            }
+
+            java.sql.Date birth = java.sql.Date.valueOf(fecha);
+
+            if (fecha.isBefore(LocalDate.now())) {
                 if (index != -1) {
                     try {
                         PacienteDAO data = new PacienteDAO();
@@ -248,16 +263,14 @@ public class AddPaciente extends javax.swing.JDialog {
                     } catch (Exception e) {
                         JOptionPane.showMessageDialog(null, "" + e.getMessage(), "Error al ingresar", JOptionPane.ERROR_MESSAGE);
                     }
-
                 } else {
                     JOptionPane.showMessageDialog(null, "Seleccione una Unidad primero.", "Ha dejado una selección en blanco.", JOptionPane.ERROR_MESSAGE);
                 }
-           // } else {
-             //   JOptionPane.showMessageDialog(null, "Escoja una fecha anterior a la actual.", "Ha escogido una fecha incorrecta.", JOptionPane.ERROR_MESSAGE);
-          //  }
+            } else {
+                JOptionPane.showMessageDialog(null, "Escoja una fecha anterior a la actual.", "Ha escogido una fecha incorrecta.", JOptionPane.ERROR_MESSAGE);
+            }
         } else {
             JOptionPane.showMessageDialog(null, "No deje de Ingresar todos los datos.", "Ha dejado una selección en blanco.", JOptionPane.ERROR_MESSAGE);
-
         }
 
 
