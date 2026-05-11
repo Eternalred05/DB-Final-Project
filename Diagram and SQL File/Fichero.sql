@@ -42,15 +42,15 @@ DROP FUNCTION IF EXISTS modificar_informe(VARCHAR, INTEGER, DATE, TIME, INTEGER,
 DROP FUNCTION IF EXISTS eliminar_informe(VARCHAR, INTEGER)                                              CASCADE;
 
 CREATE TABLE Hospital (
-    codHospital  VARCHAR(10)  NOT NULL,
+    codHospital  VARCHAR(20)  NOT NULL,
     nombreHosp   VARCHAR(150) NOT NULL,
     CONSTRAINT pk_hospital PRIMARY KEY (codHospital)
 );
 
 CREATE TABLE Departamento (
-    codDpt       VARCHAR(10)  NOT NULL,
+    codDpt       VARCHAR(20)  NOT NULL,
     nombreDpt    VARCHAR(150) NOT NULL,
-    codHospital  VARCHAR(10)  NOT NULL,
+    codHospital  VARCHAR(20)  NOT NULL,
     CONSTRAINT pk_departamento PRIMARY KEY (codDpt),
     CONSTRAINT fk_dpt_hospital FOREIGN KEY (codHospital)
         REFERENCES Hospital(codHospital)
@@ -58,10 +58,10 @@ CREATE TABLE Departamento (
 );
 
 CREATE TABLE Unidad (
-    codUnidad    VARCHAR(10)  NOT NULL,
+    codUnidad    VARCHAR(20)  NOT NULL,
     nombreUnidad VARCHAR(150) NOT NULL,
     ubicacion    VARCHAR(200) NOT NULL,
-    codDpt       VARCHAR(10)  NOT NULL,
+    codDpt       VARCHAR(20)  NOT NULL,
     CONSTRAINT pk_unidad PRIMARY KEY (codUnidad),
     CONSTRAINT fk_unidad_dpt FOREIGN KEY (codDpt)
         REFERENCES Departamento(codDpt)
@@ -69,13 +69,13 @@ CREATE TABLE Unidad (
 );
 
 CREATE TABLE Medico (
-    codMedico    VARCHAR(10)  NOT NULL,
+    codMedico    VARCHAR(20)  NOT NULL,
     nombreMed    VARCHAR(200) NOT NULL,
     telefono     VARCHAR(20),
     especialidad VARCHAR(100) NOT NULL,
     numLicencia  VARCHAR(50)  NOT NULL,
     experiencia  INTEGER      NOT NULL CHECK (experiencia >= 0),
-    codUnidad    VARCHAR(10)  NOT NULL,
+    codUnidad    VARCHAR(20)  NOT NULL,
     CONSTRAINT pk_medico PRIMARY KEY (codMedico),
     CONSTRAINT fk_medico_unidad FOREIGN KEY (codUnidad)
         REFERENCES Unidad(codUnidad)
@@ -84,8 +84,8 @@ CREATE TABLE Medico (
 );
 
 CREATE TABLE Paciente (
-    codUnidad      VARCHAR(10)  NOT NULL,
-    numHistClinica INTEGER      NOT NULL,
+    codUnidad      VARCHAR(20)  NOT NULL,
+    numHistClinica VARCHAR(20)     NOT NULL,
     nombrePac      VARCHAR(200) NOT NULL,
     direccion      VARCHAR(250) NOT NULL,
     nacimiento     DATE         NOT NULL,
@@ -102,11 +102,11 @@ CREATE TABLE Paciente (
 );
 
 CREATE TABLE Turno (
-    codUnidad      VARCHAR(10) NOT NULL,
+    codUnidad      VARCHAR(20) NOT NULL,
     numTurno       INTEGER     NOT NULL,
     cantPacientes  INTEGER     NOT NULL CHECK (cantPacientes >= 0),
     pacientesAtend INTEGER     NOT NULL DEFAULT 0 CHECK (pacientesAtend >= 0),
-    codMedico      VARCHAR(10) NOT NULL,
+    codMedico      VARCHAR(20) NOT NULL,
     CONSTRAINT pk_turno PRIMARY KEY (codUnidad, numTurno),
     CONSTRAINT fk_turno_unidad FOREIGN KEY (codUnidad)
         REFERENCES Unidad(codUnidad)
@@ -430,7 +430,7 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION insertar_paciente(
     p_codUnidad      VARCHAR,
-    p_numHistClinica INTEGER,
+    p_numHistClinica VARCHAR,
     p_nombrePac      VARCHAR,
     p_direccion      VARCHAR,
     p_nacimiento     DATE,
@@ -446,7 +446,7 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION modificar_paciente(
     p_codUnidad      VARCHAR,
-    p_numHistClinica INTEGER,
+    p_numHistClinica VARCHAR,
     p_nombrePac      VARCHAR,
     p_direccion      VARCHAR,
     p_nacimiento     DATE,
@@ -470,7 +470,7 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION eliminar_paciente(
     p_codUnidad      VARCHAR,
-    p_numHistClinica INTEGER
+    p_numHistClinica VARCHAR
 ) RETURNS VOID AS $$
 BEGIN
     DELETE FROM Paciente
@@ -593,48 +593,3 @@ BEGIN
     RAISE NOTICE 'Informe % de la unidad "%" eliminado correctamente.', p_numInforme, p_codUnidad;
 END;
 $$ LANGUAGE plpgsql;
-
-/*
--- ============================================================
--- 11. DATOS DE PRUEBA  (comentar si no se desea insertar)
--- ============================================================
-
--- Hospitales
-SELECT insertar_hospital('H001', 'Hospital General Universitario');
-SELECT insertar_hospital('H002', 'Hospital Pediátrico Provincial');
-
--- Departamentos
-SELECT insertar_departamento('D001', 'Medicina Interna',  'H001');
-SELECT insertar_departamento('D002', 'Cirugía General',   'H001');
-SELECT insertar_departamento('D003', 'Neonatología',      'H002');
-
--- Unidades
-SELECT insertar_unidad('U001', 'Unidad de Cardiología',  'Piso 2 Ala Norte', 'D001');
-SELECT insertar_unidad('U002', 'Unidad de Neurología',   'Piso 3 Ala Sur',   'D001');
-SELECT insertar_unidad('U003', 'Unidad Quirúrgica A',    'Piso 1 Ala Este',  'D002');
-SELECT insertar_unidad('U004', 'Unidad de Neonatos',     'Planta Baja',      'D003');
-
--- Médicos
-SELECT insertar_medico('M001','Dr. Carlos Pérez Ramos',  '55512345','Cardiología',  'LIC-001', 15,'U001');
-SELECT insertar_medico('M002','Dra. Ana López Díaz',     '55598765','Neurología',   'LIC-002', 10,'U002');
-SELECT insertar_medico('M003','Dr. Luis García Mora',    '55511111','Cirugía',      'LIC-003', 20,'U003');
-SELECT insertar_medico('M004','Dra. María Torres Vega',  '55522222','Neonatología', 'LIC-004',  8,'U004');
-
--- Pacientes (todos ≥ 16 años)
-SELECT insertar_paciente('U001',1,'Juan Martínez Fuentes', 'Calle 5 No. 12', '1980-04-10', FALSE, 'Fuera de la provincia');
-SELECT insertar_paciente('U001',2,'Rosa Jiménez Cabrera',  'Ave 31 No. 45',  '1975-08-22', TRUE,  NULL);
-SELECT insertar_paciente('U002',1,'Pedro Sánchez Ruiz',    'Calle 9 No. 8',  '2006-01-15', FALSE, 'Hospitalizado en otra unidad');
-SELECT insertar_paciente('U003',1,'Elena Gómez Vidal',     'Reparto Nuevo 3','1990-11-30', TRUE,  NULL);
-
--- Turnos
-SELECT insertar_turno('U001', 1, 10, 8, 'M001');
-SELECT insertar_turno('U002', 1,  5, 2, 'M002');  -- < 80 %, disparará aviso
-SELECT insertar_turno('U003', 1, 12,10, 'M003');
-
--- Informes
-SELECT insertar_informe('U001',1,'2024-03-15','08:00:00', 3,1,2,10, 1);
-SELECT insertar_informe('U001',2,'2024-03-15','12:00:00', 5,2,1,10, 1);
-SELECT insertar_informe('U003',1,'2024-03-15','09:00:00', 5,3,0,12, 1);
-
-*/
-
