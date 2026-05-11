@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import Connection.ConnectionManager;
 import java.sql.ResultSet;
 import Logic.*;
+import Aux.*;
 import java.util.ArrayList;
 import java.sql.Date;
 
@@ -48,27 +49,59 @@ public class PacienteDAO {
         return lista;
     }
 
-    public Paciente obtenerPacientePorPosicion(int posicion) {
-        Paciente h = null;
-        String sql = "SELECT codMedico, nombreMed, telefono,especialidad,numLicencia,experiencia,codUnidad FROM Doctor ORDER BY nombreMed LIMIT 1 OFFSET ?";
-        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, posicion);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                String nom = rs.getString("nombreMed");
-                String codMed = rs.getString("codMedico");
-                String telefono = rs.getString("telefono");
-                String especialidad = rs.getString("especialidad");
-                String licencia = rs.getString("numLicencia");
-                int experiencia = rs.getInt("experiencia");
-                String codU = rs.getString("codUnidad");
-                //  h = new Doctor(nom, codMed, especialidad, licencia, telefono, experiencia, codU);
+    public ArrayList<PacienteListado> listarPacientesReporte(String codHospital, String codDpt, String codUnidad) {
+        ArrayList<PacienteListado> lista = new ArrayList<>();
 
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT h.nombreHosp AS hospital, d.nombreDpt AS departamento, u.nombreUnidad AS unidad, ");
+        sql.append("p.numHistClinica, p.nombrePac, TO_CHAR(p.nacimiento, 'DD/MM/YYYY') AS nacimiento, p.direccion ");
+        sql.append("FROM Paciente p ");
+        sql.append("JOIN Unidad u ON p.codUnidad = u.codUnidad ");
+        sql.append("JOIN Departamento d ON u.codDpt = d.codDpt ");
+        sql.append("JOIN Hospital h ON d.codHospital = h.codHospital ");
+        sql.append("WHERE 1=1 ");
+
+        if (codHospital != null && !codHospital.isEmpty()) {
+            sql.append("AND h.codHospital = ? ");
+        }
+        if (codDpt != null && !codDpt.isEmpty()) {
+            sql.append("AND d.codDpt = ? ");
+        }
+        if (codUnidad != null && !codUnidad.isEmpty()) {
+            sql.append("AND u.codUnidad = ? ");
+        }
+
+        sql.append("ORDER BY u.nombreUnidad, p.nombrePac");
+
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+
+            int index = 1;
+            if (codHospital != null && !codHospital.isEmpty()) {
+                stmt.setString(index++, codHospital);
+            }
+            if (codDpt != null && !codDpt.isEmpty()) {
+                stmt.setString(index++, codDpt);
+            }
+            if (codUnidad != null && !codUnidad.isEmpty()) {
+                stmt.setString(index++, codUnidad);
+            }
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                lista.add(new PacienteListado(
+                        rs.getString("hospital"),
+                        rs.getString("departamento"),
+                        rs.getString("unidad"),
+                        rs.getString("numHistClinica"),
+                        rs.getString("nombrePac"),
+                        rs.getString("nacimiento"),
+                        rs.getString("direccion")
+                ));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error al obtener el doctor escogido " + e.getMessage(), e);
+            throw new RuntimeException("Error al listar pacientes del reporte: " + e.getMessage(), e);
         }
-        return h;
+        return lista;
     }
 
 }
