@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import Connection.ConnectionManager;
 import java.sql.ResultSet;
 import Logic.*;
+import Aux.*;
 import java.util.ArrayList;
 
 public class DoctorDAO {
@@ -68,6 +69,62 @@ public class DoctorDAO {
             throw new RuntimeException("Error al obtener el doctor escogido " + e.getMessage(), e);
         }
         return h;
+    }
+
+    public ArrayList<MedicoListado> listarMedicosReporte(String codHospital, String codDpt, String codUnidad) {
+        ArrayList<MedicoListado> lista = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT h.nombreHosp AS hospital, d.nombreDpt AS departamento, u.nombreUnidad AS unidad, ");
+        sql.append("m.nombreMed, m.especialidad, m.numLicencia, m.telefono, m.experiencia ");
+        sql.append("FROM Medico m ");
+        sql.append("JOIN Unidad u ON m.codUnidad = u.codUnidad ");
+        sql.append("JOIN Departamento d ON u.codDpt = d.codDpt ");
+        sql.append("JOIN Hospital h ON d.codHospital = h.codHospital ");
+        sql.append("WHERE 1=1 ");
+
+        if (codHospital != null && !codHospital.isEmpty()) {
+            sql.append("AND h.codHospital = ? ");
+        }
+        if (codDpt != null && !codDpt.isEmpty()) {
+            sql.append("AND d.codDpt = ? ");
+        }
+        if (codUnidad != null && !codUnidad.isEmpty()) {
+            sql.append("AND u.codUnidad = ? ");
+        }
+
+        sql.append("ORDER BY u.nombreUnidad, m.nombreMed");
+
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+
+            int index = 1;
+            if (codHospital != null && !codHospital.isEmpty()) {
+                stmt.setString(index++, codHospital);
+            }
+            if (codDpt != null && !codDpt.isEmpty()) {
+                stmt.setString(index++, codDpt);
+            }
+            if (codUnidad != null && !codUnidad.isEmpty()) {
+                stmt.setString(index++, codUnidad);
+            }
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                lista.add(new MedicoListado(
+                        rs.getString("hospital"),
+                        rs.getString("departamento"),
+                        rs.getString("unidad"),
+                        rs.getString("nombreMed"),
+                        rs.getString("especialidad"),
+                        rs.getString("numLicencia"),
+                        rs.getString("telefono"),
+                        rs.getInt("experiencia")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al listar médicos: " + e.getMessage(), e);
+        }
+        return lista;
     }
 
 }

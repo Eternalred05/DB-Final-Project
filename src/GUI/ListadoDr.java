@@ -7,17 +7,17 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 
-public class ListadoPacientes extends javax.swing.JDialog {
+public class ListadoDr extends javax.swing.JDialog {
 
     private HospitalDAO hospitalDAO = new HospitalDAO();
     private DepartamentoDAO departamentoDAO = new DepartamentoDAO();
     private UnidadDAO unidadDAO = new UnidadDAO();
-    private PacienteDAO pacienteDAO = new PacienteDAO();
+    private DoctorDAO doctorDAO = new DoctorDAO();
 
-    public ListadoPacientes(java.awt.Frame parent, boolean modal) {
+    public ListadoDr(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setTitle("Listado de Pacientes");
+        setTitle("Listado de Doctores");
         configurarTabla();
         cargarHospitales();
         configurarEventos();
@@ -25,19 +25,19 @@ public class ListadoPacientes extends javax.swing.JDialog {
     }
 
     private void configurarTabla() {
-        String[] columnas = {"Hospital", "Departamento", "Unidad", "Nº Hist. Clínica",
-            "Nombre", "Fecha Nac.", "Dirección"};
+        String[] columnas = {"Hospital", "Departamento", "Unidad", "Nombre",
+            "Especialidad", "Licencia", "Telefono", "Experiencia"};
         DefaultTableModel model = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        tablaPacientes.setModel(model);
+        tablaDr.setModel(model);
 
-        tablaPacientes.getTableHeader().setReorderingAllowed(false);
+        tablaDr.getTableHeader().setReorderingAllowed(false);
 
-        tablaPacientes.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tablaDr.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
     }
 
     private void cargarHospitales() {
@@ -95,22 +95,22 @@ public class ListadoPacientes extends javax.swing.JDialog {
         });
     }
 
-    private void llenarTabla(ArrayList<PacienteListado> lista) {
-        String[] columnas = {"Hospital", "Departamento", "Unidad", "Nº Hist. Clínica",
-            "Nombre", "Fecha Nac.", "Dirección"};
-        DefaultTableModel model = new DefaultTableModel(columnas, 0);
-        for (PacienteListado p : lista) {
+    private void llenarTabla(ArrayList<MedicoListado> lista) {
+        DefaultTableModel model = (DefaultTableModel) tablaDr.getModel();
+        model.setRowCount(0);  
+        for (MedicoListado m : lista) {
             model.addRow(new Object[]{
-                p.getHospital(),
-                p.getDepartamento(),
-                p.getUnidad(),
-                p.getNumHistClinica(),
-                p.getNombrePac(),
-                p.getFechaNacimiento(),
-                p.getDireccion()
+                m.getHospital(),
+                m.getDepartamento(),
+                m.getUnidad(),
+                m.getNombreMed(),
+                m.getEspecialidad(),
+                m.getNumLicencia(),
+                m.getTelefono(),
+                m.getExperiencia(),
+                m.getTelefono() 
             });
         }
-        tablaPacientes.setModel(model);
     }
 
     @SuppressWarnings("unchecked")
@@ -125,7 +125,7 @@ public class ListadoPacientes extends javax.swing.JDialog {
         comboDepartamento = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tablaPacientes = new javax.swing.JTable();
+        tablaDr = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -148,7 +148,7 @@ public class ListadoPacientes extends javax.swing.JDialog {
             }
         });
 
-        tablaPacientes.setModel(new javax.swing.table.DefaultTableModel(
+        tablaDr.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -159,7 +159,7 @@ public class ListadoPacientes extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tablaPacientes);
+        jScrollPane1.setViewportView(tablaDr);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -227,9 +227,10 @@ public class ListadoPacientes extends javax.swing.JDialog {
         String codUni = (unid != null && unid.getId() != null) ? unid.getId() : null;
 
         try {
-            ArrayList<PacienteListado> lista = pacienteDAO.listarPacientesReporte(codHosp, codDpt, codUni);
+            ArrayList<MedicoListado> lista = doctorDAO.listarMedicosReporte(codHosp, codDpt, codUni);
             llenarTabla(lista);
-        } catch (RuntimeException ex) {
+        } catch (Exception ex) {
+            ex.printStackTrace();
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -285,6 +286,6 @@ public class ListadoPacientes extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tablaPacientes;
+    private javax.swing.JTable tablaDr;
     // End of variables declaration//GEN-END:variables
 }

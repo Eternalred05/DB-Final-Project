@@ -7,6 +7,7 @@ import Connection.ConnectionManager;
 import java.sql.ResultSet;
 import Logic.Hospital;
 import java.util.ArrayList;
+import Aux.*;
 
 public class HospitalDAO {
 
@@ -50,5 +51,30 @@ public class HospitalDAO {
             throw new RuntimeException("Error al obtener hospital: " + e.getMessage(), e);
         }
         return h;
+    }
+
+    public ArrayList<ResumenHospital> obtenerResumenHospitales() {
+        ArrayList<ResumenHospital> lista = new ArrayList<>();
+        String sql = "SELECT h.nombreHosp, "
+                + "(SELECT COUNT(*) FROM Departamento WHERE codHospital = h.codHospital) AS deptos, "
+                + "(SELECT COUNT(*) FROM Unidad WHERE codDpt IN (SELECT codDpt FROM Departamento WHERE codHospital = h.codHospital)) AS unidades, "
+                + "(SELECT COUNT(*) FROM Medico WHERE codUnidad IN (SELECT codUnidad FROM Unidad WHERE codDpt IN (SELECT codDpt FROM Departamento WHERE codHospital = h.codHospital))) AS medicos, "
+                + "(SELECT COUNT(*) FROM Paciente WHERE codUnidad IN (SELECT codUnidad FROM Unidad WHERE codDpt IN (SELECT codDpt FROM Departamento WHERE codHospital = h.codHospital))) AS pacientes "
+                + "FROM Hospital h ORDER BY h.nombreHosp";
+
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                lista.add(new ResumenHospital(
+                        rs.getString("nombreHosp"),
+                        rs.getInt("deptos"),
+                        rs.getInt("unidades"),
+                        rs.getInt("medicos"),
+                        rs.getInt("pacientes")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener resumen de hospitales: " + e.getMessage(), e);
+        }
+        return lista;
     }
 }
