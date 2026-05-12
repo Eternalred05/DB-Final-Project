@@ -77,4 +77,28 @@ public class HospitalDAO {
         }
         return lista;
     }
+
+    public ArrayList<ResumenHospital> obtenerTop5Hospitales() {
+        ArrayList<ResumenHospital> lista = new ArrayList<>();
+        String sql
+                = "SELECT h.nombreHosp, COUNT(p.numHistClinica) AS total_pacientes "
+                + "FROM Hospital h "
+                + "JOIN Departamento d ON h.codHospital = d.codHospital "
+                + "JOIN Unidad u ON d.codDpt = u.codDpt "
+                + "JOIN Paciente p ON u.codUnidad = p.codUnidad "
+                + "GROUP BY h.codHospital, h.nombreHosp "
+                + "HAVING COUNT(p.numHistClinica) > 100 "
+                + "ORDER BY total_pacientes DESC "
+                + "LIMIT 5";
+
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                lista.add(new ResumenHospital(
+                        rs.getString("nombreHosp"), 0, 0, 0, rs.getInt("total_pacientes")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener los hospitales: " + e.getMessage(), e);
+        }
+        return lista;
+    }
 }
