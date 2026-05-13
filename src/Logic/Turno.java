@@ -2,16 +2,37 @@ package Logic;
 
 public class Turno {
 
-    private Doctor doctor;
     private int numTurno;
-    private int pacientesAtendidos;
-    private int pacientesAsignados;
+    private int cantPacientes;
+    private int pacientesAtend;
+    private String codMedico;
+    private String codUnidad;
 
-    public Turno(Doctor doctor, int numTurno, int pacientesAtendidos, int pacientesAsignados) {
-        this.doctor = doctor;
+    public Turno(int numTurno, int cantPacientes, int pacientesAtend, String codMedico, String codUnidad) {
         this.numTurno = numTurno;
-        this.pacientesAtendidos = pacientesAtendidos;
-        this.pacientesAsignados = pacientesAsignados;
+        this.cantPacientes = cantPacientes;
+        this.pacientesAtend = pacientesAtend;
+        this.codMedico = codMedico;
+        this.codUnidad = codUnidad;
     }
 
+    public int getNumTurno() {
+        return numTurno;
+    }
+
+    public int getCantPacientes() {
+        return cantPacientes;
+    }
+
+    public int getPacientesAtend() {
+        return pacientesAtend;
+    }
+
+    public String getCodMedico() {
+        return codMedico;
+    }
+
+    public String getCodUnidad() {
+        return codUnidad;
+    }
 }
