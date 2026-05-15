@@ -45,7 +45,7 @@ public class HospitalesConMasPacientes extends javax.swing.JDialog {
         try {
             ArrayList<ResumenHospital> lista = hospitalDAO.obtenerTop5Hospitales();
             DefaultTableModel model = (DefaultTableModel) tablaHospital.getModel();
-            model.setRowCount(0);  // limpiar
+            model.setRowCount(0);
             for (ResumenHospital rh : lista) {
                 model.addRow(new Object[]{
                     rh.getNombreHospital(),

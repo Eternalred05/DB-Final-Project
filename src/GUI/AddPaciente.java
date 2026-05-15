@@ -24,6 +24,7 @@ public class AddPaciente extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         addUnities();
+
     }
 
     private void addUnities() {
@@ -233,7 +234,7 @@ public class AddPaciente extends javax.swing.JDialog {
         String codP = id.getText();
         String direccion = dir.getText();
         boolean atend = false;
-        String causa = "";
+        String causa = "Ingresado Recientemente";
         String codUnidad = "";
 
         if (!nom.isEmpty() && !codP.isEmpty() && !direccion.isEmpty() && jDateChooser.getDate() != null) {
