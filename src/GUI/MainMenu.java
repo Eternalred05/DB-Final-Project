@@ -182,7 +182,7 @@ public class MainMenu extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuItem9);
 
-        jMenuItem16.setText("IDatos de Informes");
+        jMenuItem16.setText("Datos de Informes");
         jMenuItem16.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem16ActionPerformed(evt);
@@ -367,7 +367,16 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem15ActionPerformed
 
     private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
-        // TODO add your handling code here:
+
+        try {
+            ReporteInformeConsultas ah = new ReporteInformeConsultas(this, true);
+            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            ah.setLocationRelativeTo(null);
+            ah.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }//GEN-LAST:event_jMenuItem16ActionPerformed
 
     /**
