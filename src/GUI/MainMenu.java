@@ -50,6 +50,10 @@ public class MainMenu extends javax.swing.JFrame {
         jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem9 = new javax.swing.JMenuItem();
         jMenuItem16 = new javax.swing.JMenuItem();
+        jMenuItem17 = new javax.swing.JMenuItem();
+        jMenuItem18 = new javax.swing.JMenuItem();
+        jMenuItem19 = new javax.swing.JMenuItem();
+        jMenuItem20 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
@@ -189,6 +193,23 @@ public class MainMenu extends javax.swing.JFrame {
             }
         });
         jMenu2.add(jMenuItem16);
+
+        jMenuItem17.setText("Listado de Pacientes no Atendidos");
+        jMenuItem17.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem17ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem17);
+
+        jMenuItem18.setText("Resumen Del Proceso");
+        jMenu2.add(jMenuItem18);
+
+        jMenuItem19.setText("Listado de Unidades con Turnos a Revisar");
+        jMenu2.add(jMenuItem19);
+
+        jMenuItem20.setText("Resumen de Consultas Exitosas");
+        jMenu2.add(jMenuItem20);
 
         jMenuBar1.add(jMenu2);
 
@@ -379,6 +400,18 @@ public class MainMenu extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jMenuItem16ActionPerformed
 
+    private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
+        try {
+            ListadoPacientesNoAtend ah = new ListadoPacientesNoAtend(this, true);
+            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            ah.setLocationRelativeTo(null);
+            ah.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }//GEN-LAST:event_jMenuItem17ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -428,7 +461,11 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem15;
     private javax.swing.JMenuItem jMenuItem16;
+    private javax.swing.JMenuItem jMenuItem17;
+    private javax.swing.JMenuItem jMenuItem18;
+    private javax.swing.JMenuItem jMenuItem19;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem20;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;

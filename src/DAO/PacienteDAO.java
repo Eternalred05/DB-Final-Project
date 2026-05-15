@@ -171,4 +171,46 @@ public class PacienteDAO {
         return total;
     }
 
+    public ArrayList<PacienteNoAtendido> listarPacientesNoAtendidosPorTurno(String codUnidad, int numTurno) {
+        ArrayList<PacienteNoAtendido> lista = new ArrayList<>();
+        String sql = "SELECT p.numHistClinica, p.nombrePac, p.direccion, p.causa "
+                + "FROM Paciente p "
+                + "WHERE p.codUnidad = ? AND p.atendido = FALSE "
+                + "ORDER BY p.nombrePac";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String causa = rs.getString("causa");
+                if (causa == null) {
+                    causa = "Sin causa registrada";
+                }
+                lista.add(new PacienteNoAtendido(
+                        rs.getString("numHistClinica"),
+                        rs.getString("nombrePac"),
+                        rs.getString("direccion"),
+                        causa
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al listar pacientes no atendidos: " + e.getMessage(), e);
+        }
+        return lista;
+    }
+
+    public int contarPacientesNoAtendidos(String codUnidad) {
+        int total = 0;
+        String sql = "SELECT COUNT(*) FROM Paciente WHERE codUnidad = ? AND atendido = FALSE";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                total = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al contar no atendidos: " + e.getMessage(), e);
+        }
+        return total;
+    }
+
 }
