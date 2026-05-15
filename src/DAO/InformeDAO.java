@@ -2,7 +2,7 @@ package DAO;
 
 import java.sql.*;
 import Connection.ConnectionManager;
-import Aux.TurnoListado;
+import Aux.TurnoLista;
 import java.util.ArrayList;
 
 public class InformeDAO {
@@ -59,8 +59,8 @@ public class InformeDAO {
         return suma;
     }
 
-    public ArrayList<TurnoListado> informeDuranteConsultas(String codHospital, String codDpt, String codUnidad) {
-        ArrayList<TurnoListado> lista = new ArrayList<>();
+    public ArrayList<TurnoLista> informeDuranteConsultas(String codHospital, String codDpt, String codUnidad) {
+        ArrayList<TurnoLista> lista = new ArrayList<>();
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT h.nombreHosp AS hospital, d.nombreDpt AS departamento, u.nombreUnidad AS unidad, ");
         sql.append("t.numTurno, CAST(i.hora AS VARCHAR(5)) AS hora_informe, i.numInforme, ");
@@ -100,7 +100,7 @@ public class InformeDAO {
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                lista.add(new TurnoListado(
+                lista.add(new TurnoLista(
                         rs.getString("hospital"),
                         rs.getString("departamento"),
                         rs.getString("unidad"),
