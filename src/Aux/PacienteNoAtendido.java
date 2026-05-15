@@ -6,12 +6,14 @@ public class PacienteNoAtendido {
     private String nombrePac;
     private String direccion;
     private String causa;
+    private String numTurno; 
 
-    public PacienteNoAtendido(String numHistClinica, String nombrePac, String direccion, String causa) {
+    public PacienteNoAtendido(String numHistClinica, String nombrePac, String direccion, String causa, String numTurno) {
         this.numHistClinica = numHistClinica;
         this.nombrePac = nombrePac;
         this.direccion = direccion;
         this.causa = causa;
+        this.numTurno = numTurno;
     }
 
     public String getNumHistClinica() {
@@ -28,5 +30,9 @@ public class PacienteNoAtendido {
 
     public String getCausa() {
         return causa;
+    }
+
+    public String getNumTurno() {
+        return numTurno;
     }
 }

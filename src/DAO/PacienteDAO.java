@@ -171,12 +171,10 @@ public class PacienteDAO {
         return total;
     }
 
-    public ArrayList<PacienteNoAtendido> listarPacientesNoAtendidosPorTurno(String codUnidad, int numTurno) {
+    public ArrayList<PacienteNoAtendido> listarPacientesNoAtendidos(String codUnidad, int numTurno) {
         ArrayList<PacienteNoAtendido> lista = new ArrayList<>();
-        String sql = "SELECT p.numHistClinica, p.nombrePac, p.direccion, p.causa "
-                + "FROM Paciente p "
-                + "WHERE p.codUnidad = ? AND p.atendido = FALSE "
-                + "ORDER BY p.nombrePac";
+        String sql = "SELECT numHistClinica, nombrePac, direccion, causa FROM Paciente "
+                + "WHERE codUnidad = ? AND atendido = FALSE ORDER BY nombrePac";
         try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, codUnidad);
             ResultSet rs = stmt.executeQuery();
@@ -185,11 +183,18 @@ public class PacienteDAO {
                 if (causa == null) {
                     causa = "Sin causa registrada";
                 }
+                String turnoStr;
+                if (numTurno == -1) {
+                    turnoStr = "N/A";
+                } else {
+                    turnoStr = String.valueOf(numTurno);
+                }
                 lista.add(new PacienteNoAtendido(
                         rs.getString("numHistClinica"),
                         rs.getString("nombrePac"),
                         rs.getString("direccion"),
-                        causa
+                        causa,
+                        turnoStr
                 ));
             }
         } catch (SQLException e) {
