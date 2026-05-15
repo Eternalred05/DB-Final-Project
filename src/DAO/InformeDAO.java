@@ -1,15 +1,12 @@
 package DAO;
 
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import Connection.ConnectionManager;
 import Aux.TurnoListado;
 import java.util.ArrayList;
 
 public class InformeDAO {
 
-    // Insertar un informe
     public void insertarInforme(String codUnidad, int numInforme, Date fecha, Time hora,
             int pacientesAtendInf, int pacientesAlta, int pacientesAdmit,
             int pacientesRegist, int numTurno) {
@@ -30,7 +27,38 @@ public class InformeDAO {
         }
     }
 
-    // Reporte 5 – Informe durante las consultas
+    public int obtenerUltimoNumeroInforme(String codUnidad, int numTurno) {
+        String sql = "SELECT COALESCE(MAX(numInforme), 0) AS ultimo FROM Informe WHERE codUnidad = ? AND numTurno = ?";
+        int ultimo = 0;
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            stmt.setInt(2, numTurno);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                ultimo = rs.getInt("ultimo");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener último informe: " + e.getMessage(), e);
+        }
+        return ultimo;
+    }
+
+    public int obtenerSumaAtendidosPrevios(String codUnidad, int numTurno) {
+        String sql = "SELECT COALESCE(SUM(pacientesAtendInf), 0) AS suma FROM Informe WHERE codUnidad = ? AND numTurno = ?";
+        int suma = 0;
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            stmt.setInt(2, numTurno);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                suma = rs.getInt("suma");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener suma de atendidos previos: " + e.getMessage(), e);
+        }
+        return suma;
+    }
+
     public ArrayList<TurnoListado> informeDuranteConsultas(String codHospital, String codDpt, String codUnidad) {
         ArrayList<TurnoListado> lista = new ArrayList<>();
         StringBuilder sql = new StringBuilder();

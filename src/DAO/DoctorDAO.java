@@ -127,4 +127,28 @@ public class DoctorDAO {
         return lista;
     }
 
+    public ArrayList<Doctor> listarDoctoresPorUnidad(String codUnidad) {
+        ArrayList<Doctor> lista = new ArrayList<>();
+        String sql = "SELECT codMedico, nombreMed, telefono, especialidad, numLicencia, experiencia, codUnidad "
+                + "FROM Doctor WHERE codUnidad = ? ORDER BY nombreMed";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                lista.add(new Doctor(
+                        rs.getString("nombreMed"),
+                        rs.getString("codMedico"),
+                        rs.getString("especialidad"),
+                        rs.getString("numLicencia"),
+                        rs.getString("telefono"),
+                        rs.getInt("experiencia"),
+                        rs.getString("codUnidad")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al listar doctores por unidad: " + e.getMessage(), e);
+        }
+        return lista;
+    }
+
 }

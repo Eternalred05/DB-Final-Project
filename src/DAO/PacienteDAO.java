@@ -132,4 +132,43 @@ public class PacienteDAO {
         }
     }
 
+    public ArrayList<Paciente> listarPacientesNoAtendidos(String codUnidad) {
+        ArrayList<Paciente> lista = new ArrayList<>();
+        String sql = "SELECT codUnidad, numHistClinica, nombrePac, direccion, nacimiento, atendido, causa "
+                + "FROM Paciente WHERE codUnidad = ? AND atendido = FALSE ORDER BY nombrePac";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                lista.add(new Paciente(
+                        rs.getString("nombrePac"),
+                        rs.getString("numHistClinica"),
+                        rs.getString("direccion"),
+                        rs.getDate("nacimiento"),
+                        rs.getString("codUnidad"),
+                        rs.getBoolean("atendido"),
+                        rs.getString("causa")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al listar pacientes no atendidos: " + e.getMessage(), e);
+        }
+        return lista;
+    }
+
+    public int contarPacientesEnUnidad(String codUnidad) {
+        String sql = "SELECT COUNT(*) FROM Paciente WHERE codUnidad = ?";
+        int total = 0;
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                total = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al contar pacientes: " + e.getMessage(), e);
+        }
+        return total;
+    }
+
 }

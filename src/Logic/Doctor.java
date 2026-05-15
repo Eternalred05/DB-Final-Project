@@ -1,7 +1,7 @@
 package Logic;
 
 public class Doctor {
-    
+
     private String name;
     private String id;
     private String speciality;
@@ -47,7 +47,10 @@ public class Doctor {
     public String getCodUnidad() {
         return codUnidad;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return name;
+    }
 
 }

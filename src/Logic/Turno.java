@@ -35,4 +35,9 @@ public class Turno {
     public String getCodUnidad() {
         return codUnidad;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(numTurno);
+    }
 }
