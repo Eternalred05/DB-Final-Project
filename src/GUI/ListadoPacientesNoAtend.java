@@ -26,7 +26,7 @@ public class ListadoPacientesNoAtend extends javax.swing.JDialog {
     }
 
     private void configurarTabla() {
-        String[] cols = {"Hist. Clínica", "Nombre", "Dirección", "Causa"};
+        String[] cols = {"Turno", "Hist. Clínica", "Nombre", "Dirección", "Causa"};
         DefaultTableModel model = new DefaultTableModel(cols, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -262,28 +262,47 @@ public class ListadoPacientesNoAtend extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Turno t = (Turno) comboTurno.getSelectedItem();
-        boolean continuar = false;
+
+        // Variables de control
+        boolean ejecutar = false;
         String codUnidad = null;
         int numTurno = -1;
+        String mensajeInfo = "";
 
-        if (t != null && t.getNumTurno() != -1) {
-            continuar = true;
-            codUnidad = t.getCodUnidad();
-            numTurno = t.getNumTurno();
+        // Verificar selección de unidad (necesaria siempre)
+        Unidad u = (Unidad) comboUnidad.getSelectedItem();
+        if (u != null && u.getId() != null) {
+            codUnidad = u.getId();
         } else {
-            JOptionPane.showMessageDialog(this, "Seleccione un turno específico para generar el reporte.");
+            mensajeInfo = "Seleccione una unidad.";
         }
 
-        if (continuar) {
+        if (codUnidad != null) {
+            if (t != null) {
+                numTurno = t.getNumTurno();
+
+                ejecutar = true;
+                if (numTurno != -1) {
+                    mensajeInfo = "Turno específico: " + numTurno;
+                } else {
+                    mensajeInfo = "Mostrando todos los turnos de la unidad.";
+                }
+            } else {
+                mensajeInfo = "Seleccione un turno (o 'Todos los turnos').";
+            }
+        }
+
+        if (ejecutar) {
             try {
-                ArrayList<PacienteNoAtendido> lista = pacienteDAO.listarPacientesNoAtendidosPorTurno(codUnidad, numTurno);
+                ArrayList<PacienteNoAtendido> lista = pacienteDAO.listarPacientesNoAtendidos(codUnidad, numTurno);
                 int total = pacienteDAO.contarPacientesNoAtendidos(codUnidad);
-                lblTotal.setText(String.valueOf(total));
+                lblTotal.setText("Total de pacientes no atendidos: " + total);
 
                 DefaultTableModel model = (DefaultTableModel) tablaNoAtendidos.getModel();
                 model.setRowCount(0);
                 for (PacienteNoAtendido p : lista) {
                     model.addRow(new Object[]{
+                        p.getNumTurno(),
                         p.getNumHistClinica(),
                         p.getNombrePac(),
                         p.getDireccion(),
@@ -293,6 +312,9 @@ public class ListadoPacientesNoAtend extends javax.swing.JDialog {
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
+        } else {
+
+            JOptionPane.showMessageDialog(this, mensajeInfo);
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
