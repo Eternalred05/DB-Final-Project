@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS Informe   CASCADE;
 DROP TABLE IF EXISTS Turno     CASCADE;
 DROP TABLE IF EXISTS Paciente  CASCADE;
-DROP TABLE IF EXISTS Medico    CASCADE;
+DROP TABLE IF EXISTS Doctor    CASCADE;
 DROP TABLE IF EXISTS Unidad    CASCADE;
 DROP TABLE IF EXISTS Departamento CASCADE;
 DROP TABLE IF EXISTS Hospital  CASCADE;
@@ -68,7 +68,7 @@ CREATE TABLE Unidad (
         ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
-CREATE TABLE Medico (
+CREATE TABLE Doctor (
     codMedico    VARCHAR(20)  NOT NULL,
     nombreMed    VARCHAR(200) NOT NULL,
     telefono     VARCHAR(20),
@@ -112,13 +112,13 @@ CREATE TABLE Turno (
         REFERENCES Unidad(codUnidad)
         ON UPDATE CASCADE ON DELETE RESTRICT,
     CONSTRAINT fk_turno_medico FOREIGN KEY (codMedico)
-        REFERENCES Medico(codMedico)
+        REFERENCES Doctor(codMedico)
         ON UPDATE CASCADE ON DELETE RESTRICT,
     CONSTRAINT chk_atend_lte_cant CHECK (pacientesAtend <= cantPacientes)
 );
 
 CREATE TABLE Informe (
-    codUnidad         VARCHAR(10) NOT NULL,
+    codUnidad         VARCHAR(20) NOT NULL,
     numInforme        INTEGER     NOT NULL,
     fecha             DATE        NOT NULL,
     hora              TIME        NOT NULL,
@@ -135,7 +135,7 @@ CREATE TABLE Informe (
 
 CREATE INDEX idx_dpt_hospital  ON Departamento(codHospital);
 CREATE INDEX idx_unidad_dpt    ON Unidad(codDpt);
-CREATE INDEX idx_medico_unidad ON Medico(codUnidad);
+CREATE INDEX idx_medico_unidad ON Doctor(codUnidad);
 CREATE INDEX idx_pac_unidad    ON Paciente(codUnidad);
 CREATE INDEX idx_turno_medico  ON Turno(codMedico);
 CREATE INDEX idx_informe_turno ON Informe(codUnidad, numTurno);
@@ -217,7 +217,7 @@ DECLARE
 BEGIN
 
     SELECT COUNT(*) INTO total
-    FROM Medico
+    FROM Doctor
     WHERE codUnidad = NEW.codUnidad
       AND codMedico <> NEW.codMedico;  
 
@@ -229,7 +229,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trg_check_max_medicos
-BEFORE INSERT OR UPDATE ON Medico
+BEFORE INSERT OR UPDATE ON Doctor
 FOR EACH ROW EXECUTE PROCEDURE trg_max_medicos_por_unidad();
 
 CREATE OR REPLACE FUNCTION trg_turno_exitoso()
@@ -384,7 +384,7 @@ CREATE OR REPLACE FUNCTION insertar_medico(
     p_codUnidad    VARCHAR
 ) RETURNS VOID AS $$
 BEGIN
-    INSERT INTO Medico(codMedico, nombreMed, telefono, especialidad, numLicencia, experiencia, codUnidad)
+    INSERT INTO Doctor(codMedico, nombreMed, telefono, especialidad, numLicencia, experiencia, codUnidad)
     VALUES (p_codMedico, p_nombreMed, p_telefono, p_especialidad, p_numLicencia, p_experiencia, p_codUnidad);
     RAISE NOTICE 'Médico "%" insertado correctamente.', p_nombreMed;
 END;
@@ -400,7 +400,7 @@ CREATE OR REPLACE FUNCTION modificar_medico(
     p_codUnidad    VARCHAR
 ) RETURNS VOID AS $$
 BEGIN
-    UPDATE Medico
+    UPDATE Doctor
     SET nombreMed    = p_nombreMed,
         telefono     = p_telefono,
         especialidad = p_especialidad,
@@ -419,7 +419,7 @@ CREATE OR REPLACE FUNCTION eliminar_medico(
     p_codMedico VARCHAR
 ) RETURNS VOID AS $$
 BEGIN
-    DELETE FROM Medico WHERE codMedico = p_codMedico;
+    DELETE FROM Doctor WHERE codMedico = p_codMedico;
     IF NOT FOUND THEN
         RAISE EXCEPTION 'Médico con código "%" no encontrado.', p_codMedico;
     END IF;
@@ -593,7 +593,3 @@ BEGIN
     RAISE NOTICE 'Informe % de la unidad "%" eliminado correctamente.', p_numInforme, p_codUnidad;
 END;
 $$ LANGUAGE plpgsql;
-
-
-*/
-
