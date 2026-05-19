@@ -4,6 +4,7 @@ import Aux.ResumenProceso;
 import java.sql.*;
 import Connection.ConnectionManager;
 import Aux.TurnoLista;
+import Aux.UnidadExitosa;
 import Aux.UnidadRevision;
 import java.util.ArrayList;
 
@@ -227,7 +228,7 @@ public class InformeDAO {
         sql.append("SUM(t.pacientesAtend) AS atendidos_medico, ");
         sql.append("ROUND(SUM(t.pacientesAtend) * 100.0 / tu.total_atendidos, 2) AS porcentaje ");
         sql.append("FROM Turno t ");
-        sql.append("JOIN Doctor m ON t.codMedico = m.codMedico ");  
+        sql.append("JOIN Doctor m ON t.codMedico = m.codMedico ");
         sql.append("JOIN Unidad u ON t.codUnidad = u.codUnidad ");
         sql.append("JOIN Departamento d ON u.codDpt = d.codDpt ");
         sql.append("JOIN Hospital h ON d.codHospital = h.codHospital ");
@@ -274,6 +275,75 @@ public class InformeDAO {
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error al generar listado de revisión: " + e.getMessage(), e);
+        }
+        return lista;
+    }
+
+    public ArrayList<UnidadExitosa> resumenConsultasExitosas(String codHospital, String codDpt, String codUnidad) {
+        ArrayList<UnidadExitosa> lista = new ArrayList<>();
+        StringBuilder sql = new StringBuilder();
+        sql.append("WITH unidades_exitosas AS ( ");
+        sql.append("  SELECT t.codUnidad ");
+        sql.append("  FROM Turno t ");
+        sql.append("  GROUP BY t.codUnidad ");
+        sql.append("  HAVING MIN(1.0 * t.pacientesAtend / NULLIF(t.cantPacientes,0)) >= 0.8 ");
+        sql.append("), ");
+        sql.append("totales_medico AS ( ");
+        sql.append("  SELECT t.codMedico, ue.codUnidad, SUM(t.pacientesAtend) AS total_atendidos ");
+        sql.append("  FROM Turno t ");
+        sql.append("  JOIN unidades_exitosas ue ON t.codUnidad = ue.codUnidad ");
+        sql.append("  GROUP BY t.codMedico, ue.codUnidad ");
+        sql.append(") ");
+        sql.append("SELECT h.nombreHosp AS hospital, d.nombreDpt AS departamento, u.nombreUnidad AS unidad, ");
+        sql.append("t.numTurno, doc.nombreMed AS medico, t.pacientesAtend AS atendidos_turno, ");
+        sql.append("tm.total_atendidos AS total_medico ");
+        sql.append("FROM Turno t ");
+        sql.append("JOIN unidades_exitosas ue ON t.codUnidad = ue.codUnidad ");
+        sql.append("JOIN Doctor doc ON t.codMedico = doc.codMedico ");
+        sql.append("JOIN Unidad u ON t.codUnidad = u.codUnidad ");
+        sql.append("JOIN Departamento d ON u.codDpt = d.codDpt ");
+        sql.append("JOIN Hospital h ON d.codHospital = h.codHospital ");
+        sql.append("JOIN totales_medico tm ON tm.codMedico = t.codMedico AND tm.codUnidad = t.codUnidad ");
+        sql.append("WHERE 1=1 ");
+
+        if (codHospital != null && !codHospital.isEmpty()) {
+            sql.append("AND h.codHospital = ? ");
+        }
+        if (codDpt != null && !codDpt.isEmpty()) {
+            sql.append("AND d.codDpt = ? ");
+        }
+        if (codUnidad != null && !codUnidad.isEmpty()) {
+            sql.append("AND u.codUnidad = ? ");
+        }
+
+        sql.append("ORDER BY u.nombreUnidad, t.numTurno");
+
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+            int idx = 1;
+            if (codHospital != null && !codHospital.isEmpty()) {
+                stmt.setString(idx++, codHospital);
+            }
+            if (codDpt != null && !codDpt.isEmpty()) {
+                stmt.setString(idx++, codDpt);
+            }
+            if (codUnidad != null && !codUnidad.isEmpty()) {
+                stmt.setString(idx++, codUnidad);
+            }
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                lista.add(new UnidadExitosa(
+                        rs.getString("hospital"),
+                        rs.getString("departamento"),
+                        rs.getString("unidad"),
+                        rs.getInt("numTurno"),
+                        rs.getString("medico"),
+                        rs.getInt("atendidos_turno"),
+                        rs.getInt("total_medico")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al generar resumen de consultas exitosas: " + e.getMessage(), e);
         }
         return lista;
     }
