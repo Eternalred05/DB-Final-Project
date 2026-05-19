@@ -39,7 +39,6 @@ public class MainMenu extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem12 = new javax.swing.JMenuItem();
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem14 = new javax.swing.JMenuItem();
@@ -118,9 +117,6 @@ public class MainMenu extends javax.swing.JFrame {
             }
         });
         jMenu1.add(jMenuItem5);
-
-        jMenuItem12.setText("Paciente a Atender");
-        jMenu1.add(jMenuItem12);
 
         jMenuItem10.setText("Turno");
         jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
@@ -219,6 +215,11 @@ public class MainMenu extends javax.swing.JFrame {
         jMenu2.add(jMenuItem19);
 
         jMenuItem20.setText("Resumen de Consultas Exitosas");
+        jMenuItem20.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem20ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem20);
 
         jMenuBar1.add(jMenu2);
@@ -434,7 +435,7 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem18ActionPerformed
 
     private void jMenuItem19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem19ActionPerformed
-       try {
+        try {
             RevisarTurno ah = new RevisarTurno(this, true);
             ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             ah.setLocationRelativeTo(null);
@@ -443,6 +444,17 @@ public class MainMenu extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }//GEN-LAST:event_jMenuItem19ActionPerformed
+
+    private void jMenuItem20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem20ActionPerformed
+        try {
+            UnidadesExitosasGUI ah = new UnidadesExitosasGUI(this, true);
+            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            ah.setLocationRelativeTo(null);
+            ah.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jMenuItem20ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -488,7 +500,6 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem11;
-    private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem15;
