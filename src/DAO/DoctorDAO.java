@@ -77,7 +77,7 @@ public class DoctorDAO {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT h.nombreHosp AS hospital, d.nombreDpt AS departamento, u.nombreUnidad AS unidad, ");
         sql.append("m.nombreMed, m.especialidad, m.numLicencia, m.telefono, m.experiencia ");
-        sql.append("FROM Medico m ");
+        sql.append("FROM Doctor m ");
         sql.append("JOIN Unidad u ON m.codUnidad = u.codUnidad ");
         sql.append("JOIN Departamento d ON u.codDpt = d.codDpt ");
         sql.append("JOIN Hospital h ON d.codHospital = h.codHospital ");

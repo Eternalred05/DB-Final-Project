@@ -58,7 +58,7 @@ public class HospitalDAO {
         String sql = "SELECT h.nombreHosp, "
                 + "(SELECT COUNT(*) FROM Departamento WHERE codHospital = h.codHospital) AS deptos, "
                 + "(SELECT COUNT(*) FROM Unidad WHERE codDpt IN (SELECT codDpt FROM Departamento WHERE codHospital = h.codHospital)) AS unidades, "
-                + "(SELECT COUNT(*) FROM Medico WHERE codUnidad IN (SELECT codUnidad FROM Unidad WHERE codDpt IN (SELECT codDpt FROM Departamento WHERE codHospital = h.codHospital))) AS medicos, "
+                + "(SELECT COUNT(*) FROM Doctor WHERE codUnidad IN (SELECT codUnidad FROM Unidad WHERE codDpt IN (SELECT codDpt FROM Departamento WHERE codHospital = h.codHospital))) AS medicos, "
                 + "(SELECT COUNT(*) FROM Paciente WHERE codUnidad IN (SELECT codUnidad FROM Unidad WHERE codDpt IN (SELECT codDpt FROM Departamento WHERE codHospital = h.codHospital))) AS pacientes "
                 + "FROM Hospital h ORDER BY h.nombreHosp";
 

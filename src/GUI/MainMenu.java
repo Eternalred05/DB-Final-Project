@@ -203,9 +203,19 @@ public class MainMenu extends javax.swing.JFrame {
         jMenu2.add(jMenuItem17);
 
         jMenuItem18.setText("Resumen Del Proceso");
+        jMenuItem18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem18ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem18);
 
         jMenuItem19.setText("Listado de Unidades con Turnos a Revisar");
+        jMenuItem19.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem19ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem19);
 
         jMenuItem20.setText("Resumen de Consultas Exitosas");
@@ -334,7 +344,7 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         try {
-            ResumenHosp ah = new ResumenHosp(this, true);
+            ResumenPorHospital ah = new ResumenPorHospital(this, true);
             ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             ah.setLocationRelativeTo(null);
             ah.setVisible(true);
@@ -411,6 +421,28 @@ public class MainMenu extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jMenuItem17ActionPerformed
+
+    private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
+        try {
+            ResumenProc ah = new ResumenProc(this, true);
+            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            ah.setLocationRelativeTo(null);
+            ah.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jMenuItem18ActionPerformed
+
+    private void jMenuItem19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem19ActionPerformed
+       try {
+            RevisarTurno ah = new RevisarTurno(this, true);
+            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            ah.setLocationRelativeTo(null);
+            ah.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jMenuItem19ActionPerformed
 
     /**
      * @param args the command line arguments

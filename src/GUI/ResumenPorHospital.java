@@ -14,23 +14,20 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Alexandro
  */
-public class HospitalesConMasPacientes extends javax.swing.JDialog {
-
+public class ResumenPorHospital extends javax.swing.JDialog {
     HospitalDAO hospitalDAO = new HospitalDAO();
 
-    /**
-     * Creates new form ResumenHospital
-     */
-    public HospitalesConMasPacientes(java.awt.Frame parent, boolean modal) {
+    public ResumenPorHospital(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        setTitle("5 Hospitales con más de 100 Pacientes");
+        setTitle("Resumen de Hospitales");
         initComponents();
         configurarTabla();
-        cargarDatos();
+        cargarResumen();
     }
 
     private void configurarTabla() {
-        String[] columnas = {"Hospital", "Cantidad de pacientes"};
+        String[] columnas = {"Hospital", "Cant. Departamentos", "Cant. Unidades",
+            "Cant. Médicos", "Cant. Pacientes"};
         DefaultTableModel model = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -41,20 +38,23 @@ public class HospitalesConMasPacientes extends javax.swing.JDialog {
         tablaHospital.getTableHeader().setReorderingAllowed(false);
     }
 
-    private void cargarDatos() {
+    private void cargarResumen() {
         try {
-            ArrayList<ResumenHospital> lista = hospitalDAO.obtenerTop5Hospitales();
+            ArrayList<ResumenHospital> lista =  hospitalDAO.obtenerResumenHospitales();
             DefaultTableModel model = (DefaultTableModel) tablaHospital.getModel();
             model.setRowCount(0);
             for (ResumenHospital rh : lista) {
                 model.addRow(new Object[]{
                     rh.getNombreHospital(),
+                    rh.getCantDepartamentos(),
+                    rh.getCantUnidades(),
+                    rh.getCantMedicos(),
                     rh.getCantPacientes()
                 });
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(),
+            JOptionPane.showMessageDialog(this, "Error al cargar resumen: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -70,7 +70,7 @@ public class HospitalesConMasPacientes extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        jLabel1.setText("5 Hospitales con más de 100 Pacientes");
+        jLabel1.setText("Resumen por Hospital");
 
         tablaHospital.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -89,10 +89,10 @@ public class HospitalesConMasPacientes extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(206, 206, 206)
-                .addComponent(jLabel1)
-                .addContainerGap(225, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(272, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(267, 267, 267))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
@@ -102,9 +102,9 @@ public class HospitalesConMasPacientes extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(44, 44, 44)
+                .addGap(45, 45, 45)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(336, Short.MAX_VALUE))
+                .addContainerGap(335, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addContainerGap(89, Short.MAX_VALUE)
@@ -142,11 +142,13 @@ public class HospitalesConMasPacientes extends javax.swing.JDialog {
         }
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                HospitalesConMasPacientes dialog = new HospitalesConMasPacientes(new javax.swing.JFrame(), true);
+                ResumenPorHospital dialog = new ResumenPorHospital(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
