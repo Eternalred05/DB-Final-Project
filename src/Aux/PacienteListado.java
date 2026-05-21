@@ -9,8 +9,11 @@ public class PacienteListado {
     private String nombrePac;
     private String fechaNacimiento;
     private String direccion;
+    private String codUnidad;
 
-    public PacienteListado(String hospital, String departamento, String unidad, String numHistClinica, String nombrePac, String fechaNacimiento, String direccion) {
+    public PacienteListado(String hospital, String departamento, String unidad,
+            String numHistClinica, String nombrePac, String fechaNacimiento,
+            String direccion, String codUnidad) {
         this.hospital = hospital;
         this.departamento = departamento;
         this.unidad = unidad;
@@ -18,6 +21,11 @@ public class PacienteListado {
         this.nombrePac = nombrePac;
         this.fechaNacimiento = fechaNacimiento;
         this.direccion = direccion;
+        this.codUnidad = codUnidad;
+    }
+
+    public String getCodUnidad() {
+        return codUnidad;
     }
 
     public String getHospital() {

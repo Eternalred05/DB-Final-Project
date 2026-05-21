@@ -323,7 +323,7 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
         try {
-            ListadoPacientes ah = new ListadoPacientes(this, true);
+            ListadoPacients ah = new ListadoPacients(this, true);
             ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             ah.setLocationRelativeTo(null);
             ah.setVisible(true);

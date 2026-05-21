@@ -2,17 +2,20 @@ package DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import Connection.ConnectionManager;
 import java.sql.ResultSet;
-import Logic.*;
-import Aux.*;
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.sql.Date;
+import java.util.ArrayList;
+
+import Connection.ConnectionManager;
+import Logic.Paciente;
+import Aux.PacienteListado;
+import Aux.PacienteNoAtendido;
 
 public class PacienteDAO {
 
-    public void insertarPaciente(String numHist, String nombre, String dir, Date fecha, String causa, boolean atendido, String codUnidad) {
+    public void insertarPaciente(String numHist, String nombre, String dir, Date fecha,
+            String causa, boolean atendido, String codUnidad) {
         String sql = "SELECT insertar_paciente(?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, codUnidad);
@@ -24,14 +27,42 @@ public class PacienteDAO {
             stmt.setString(7, causa);
             stmt.execute();
         } catch (SQLException e) {
+            throw new RuntimeException("Error al insertar paciente: " + e.getMessage(), e);
+        }
+    }
 
-            throw new RuntimeException("Error al insertar al paciente" + e.getMessage(), e);
+    public void modificarPaciente(String codUnidad, String numHistClinica, String nombre,
+            String direccion, Date nacimiento, boolean atendido, String causa) {
+        String sql = "SELECT modificar_paciente(?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            stmt.setString(2, numHistClinica);
+            stmt.setString(3, nombre);
+            stmt.setString(4, direccion);
+            stmt.setDate(5, nacimiento);
+            stmt.setBoolean(6, atendido);
+            stmt.setString(7, causa);
+            stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al modificar paciente: " + e.getMessage(), e);
+        }
+    }
+
+    public void eliminarPaciente(String codUnidad, String numHistClinica) {
+        String sql = "SELECT eliminar_paciente(?, ?)";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            stmt.setString(2, numHistClinica);
+            stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al eliminar paciente: " + e.getMessage(), e);
         }
     }
 
     public ArrayList<Paciente> listarPaciente() {
         ArrayList<Paciente> lista = new ArrayList<>();
-        String sql = "SELECT codUnidad, numHistClinica, nombrePac ,direccion,nacimiento,atendido,causa FROM Paciente ORDER BY nombrePac";
+        String sql = "SELECT codUnidad, numHistClinica, nombrePac, direccion, nacimiento, atendido, causa "
+                + "FROM Paciente ORDER BY nombrePac";
         try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 String nombre = rs.getString("nombrePac");
@@ -44,17 +75,17 @@ public class PacienteDAO {
                 lista.add(new Paciente(nombre, numHistClinica, dir, fecha, codUnidad, atendido, causa));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error al listar a los pacientes: " + e.getMessage(), e);
+            throw new RuntimeException("Error al listar pacientes: " + e.getMessage(), e);
         }
         return lista;
     }
 
     public ArrayList<PacienteListado> listarPacientesReporte(String codHospital, String codDpt, String codUnidad) {
         ArrayList<PacienteListado> lista = new ArrayList<>();
-
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT h.nombreHosp AS hospital, d.nombreDpt AS departamento, u.nombreUnidad AS unidad, ");
-        sql.append("p.numHistClinica, p.nombrePac, TO_CHAR(p.nacimiento, 'DD/MM/YYYY') AS nacimiento, p.direccion ");
+        sql.append("p.numHistClinica, p.nombrePac, TO_CHAR(p.nacimiento, 'DD/MM/YYYY') AS nacimiento, p.direccion, ");
+        sql.append("p.codUnidad ");
         sql.append("FROM Paciente p ");
         sql.append("JOIN Unidad u ON p.codUnidad = u.codUnidad ");
         sql.append("JOIN Departamento d ON u.codDpt = d.codDpt ");
@@ -74,7 +105,6 @@ public class PacienteDAO {
         sql.append("ORDER BY u.nombreUnidad, p.nombrePac");
 
         try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
-
             int index = 1;
             if (codHospital != null && !codHospital.isEmpty()) {
                 stmt.setString(index++, codHospital);
@@ -95,41 +125,14 @@ public class PacienteDAO {
                         rs.getString("numHistClinica"),
                         rs.getString("nombrePac"),
                         rs.getString("nacimiento"),
-                        rs.getString("direccion")
+                        rs.getString("direccion"),
+                        rs.getString("codUnidad")
                 ));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error al listar pacientes del reporte: " + e.getMessage(), e);
         }
         return lista;
-    }
-
-    public void modificarPaciente(String codUnidad, int numHistClinica, String nombre, String dir,
-            Date fecha, boolean atendido, String causa) {
-        String sql = "SELECT modificar_paciente(?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, codUnidad);
-            stmt.setInt(2, numHistClinica);
-            stmt.setString(3, nombre);
-            stmt.setString(4, dir);
-            stmt.setDate(5, fecha);
-            stmt.setBoolean(6, atendido);
-            stmt.setString(7, causa);
-            stmt.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al modificar paciente: " + e.getMessage(), e);
-        }
-    }
-
-    public void eliminarPaciente(String codUnidad, int numHistClinica) {
-        String sql = "SELECT eliminar_paciente(?, ?)";
-        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, codUnidad);
-            stmt.setInt(2, numHistClinica);
-            stmt.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al eliminar paciente: " + e.getMessage(), e);
-        }
     }
 
     public ArrayList<Paciente> listarPacientesNoAtendidos(String codUnidad) {
@@ -156,21 +159,6 @@ public class PacienteDAO {
         return lista;
     }
 
-    public int contarPacientesEnUnidad(String codUnidad) {
-        String sql = "SELECT COUNT(*) FROM Paciente WHERE codUnidad = ?";
-        int total = 0;
-        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, codUnidad);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                total = rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al contar pacientes: " + e.getMessage(), e);
-        }
-        return total;
-    }
-
     public ArrayList<PacienteNoAtendido> listarPacientesNoAtendidos(String codUnidad, int numTurno) {
         ArrayList<PacienteNoAtendido> lista = new ArrayList<>();
         String sql = "SELECT numHistClinica, nombrePac, direccion, causa FROM Paciente "
@@ -183,12 +171,7 @@ public class PacienteDAO {
                 if (causa == null) {
                     causa = "Sin causa registrada";
                 }
-                String turnoStr;
-                if (numTurno == -1) {
-                    turnoStr = "N/A";
-                } else {
-                    turnoStr = String.valueOf(numTurno);
-                }
+                String turnoStr = (numTurno == -1) ? "N/A" : String.valueOf(numTurno);
                 lista.add(new PacienteNoAtendido(
                         rs.getString("numHistClinica"),
                         rs.getString("nombrePac"),
@@ -218,4 +201,18 @@ public class PacienteDAO {
         return total;
     }
 
+    public int contarPacientesEnUnidad(String codUnidad) {
+        int total = 0;
+        String sql = "SELECT COUNT(*) FROM Paciente WHERE codUnidad = ?";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                total = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al contar pacientes: " + e.getMessage(), e);
+        }
+        return total;
+    }
 }
