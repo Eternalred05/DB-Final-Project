@@ -3,6 +3,7 @@ package GUI;
 import DAO.*;
 import Logic.*;
 import Aux.*;
+import GUI.EditComponents.EditDr;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class ListadoDr extends javax.swing.JDialog {
 
     private void configurarTabla() {
         String[] columnas = {"Hospital", "Departamento", "Unidad", "Nombre",
-            "Especialidad", "Licencia", "Telefono", "Experiencia"};
+            "Especialidad", "Licencia", "Telefono", "Experiencia", "codMedico"};
         DefaultTableModel model = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -34,10 +35,12 @@ public class ListadoDr extends javax.swing.JDialog {
             }
         };
         tablaDr.setModel(model);
-
         tablaDr.getTableHeader().setReorderingAllowed(false);
-
         tablaDr.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+        tablaDr.getColumnModel().getColumn(8).setMinWidth(0);
+        tablaDr.getColumnModel().getColumn(8).setMaxWidth(0);
+        tablaDr.getColumnModel().getColumn(8).setWidth(0);
     }
 
     private void cargarHospitales() {
@@ -97,7 +100,7 @@ public class ListadoDr extends javax.swing.JDialog {
 
     private void llenarTabla(ArrayList<MedicoListado> lista) {
         DefaultTableModel model = (DefaultTableModel) tablaDr.getModel();
-        model.setRowCount(0);  
+        model.setRowCount(0);
         for (MedicoListado m : lista) {
             model.addRow(new Object[]{
                 m.getHospital(),
@@ -108,7 +111,7 @@ public class ListadoDr extends javax.swing.JDialog {
                 m.getNumLicencia(),
                 m.getTelefono(),
                 m.getExperiencia(),
-                m.getTelefono() 
+                m.getCodMedico()
             });
         }
     }
@@ -126,6 +129,8 @@ public class ListadoDr extends javax.swing.JDialog {
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaDr = new javax.swing.JTable();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -161,6 +166,20 @@ public class ListadoDr extends javax.swing.JDialog {
         ));
         jScrollPane1.setViewportView(tablaDr);
 
+        jButton2.setText("Editar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("Eliminar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -176,15 +195,25 @@ public class ListadoDr extends javax.swing.JDialog {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(166, 166, 166))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(comboHospital, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(64, 64, 64)
-                        .addComponent(comboDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(47, 47, 47)
-                        .addComponent(comboUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(123, 123, 123))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addContainerGap())))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(comboHospital, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(64, 64, 64)
+                                .addComponent(comboDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(47, 47, 47))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(44, 44, 44)
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(98, 98, 98)
+                                .addComponent(jButton1)
+                                .addContainerGap())
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(comboUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(123, 123, 123))))))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
@@ -204,8 +233,11 @@ public class ListadoDr extends javax.swing.JDialog {
                     .addComponent(comboHospital, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(comboUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(comboDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 464, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 453, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -234,6 +266,86 @@ public class ListadoDr extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+
+        int filasSeleccionadas = tablaDr.getSelectedRows().length;
+        boolean puedeModificar = false;
+        if (filasSeleccionadas == 1) {
+            puedeModificar = true;
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Seleccione solo un doctor para modificar.",
+                    "Error", JOptionPane.WARNING_MESSAGE);
+        }
+
+        if (puedeModificar) {
+            int fila = tablaDr.getSelectedRow();
+            DefaultTableModel model = (DefaultTableModel) tablaDr.getModel();
+
+            String codMedico = model.getValueAt(fila, 8).toString();
+            Doctor doctor = doctorDAO.obtenerDoctorPorCodigo(codMedico);
+            boolean doctorExiste = (doctor != null);
+            if (!doctorExiste) {
+                JOptionPane.showMessageDialog(this,
+                        "No se encontró el doctor en la base de datos.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            if (doctorExiste) {
+                EditDr dialog = new EditDr(null, true, doctor);
+                dialog.setLocationRelativeTo(this);
+                dialog.setVisible(true);
+
+                jButton1ActionPerformed(null);
+            }
+        }
+
+
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        int filasSeleccionadas = tablaDr.getSelectedRows().length;
+        boolean puedeEliminar = false;
+        if (filasSeleccionadas == 1) {
+            puedeEliminar = true;
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Seleccione solo un doctor para eliminar.",
+                    "Error", JOptionPane.WARNING_MESSAGE);
+        }
+
+        if (puedeEliminar) {
+            int fila = tablaDr.getSelectedRow();
+            DefaultTableModel model = (DefaultTableModel) tablaDr.getModel();
+            String codMedico = model.getValueAt(fila, 8).toString();
+            String nombreMedico = model.getValueAt(fila, 3).toString();
+
+            int turnos = doctorDAO.contarTurnosDeDoctor(codMedico);
+            boolean puedeBorrar = true;
+            if (turnos > 0) {
+                JOptionPane.showMessageDialog(this,
+                        "El doctor \"" + nombreMedico + "\" tiene " + turnos + " turno(s) asignado(s).\n"
+                        + "Elimine primero los turnos asociados.",
+                        "Eliminación no permitida", JOptionPane.WARNING_MESSAGE);
+                puedeBorrar = false;
+            }
+
+            if (puedeBorrar) {
+                int confirm = JOptionPane.showConfirmDialog(this,
+                        "¿Eliminar al doctor \"" + nombreMedico + "\" (" + codMedico + ")?",
+                        "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    try {
+                        doctorDAO.eliminarDoctor(codMedico);
+                        JOptionPane.showMessageDialog(this, "Doctor eliminado correctamente.");
+                        jButton1ActionPerformed(null);
+                    } catch (RuntimeException ex) {
+                        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -282,6 +394,8 @@ public class ListadoDr extends javax.swing.JDialog {
     private javax.swing.JComboBox<Object> comboHospital;
     private javax.swing.JComboBox<Object> comboUnidad;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -1,14 +1,16 @@
 package GUI.EditComponents;
 
+import DAO.DoctorDAO;
 import Logic.*;
+import javax.swing.JOptionPane;
 
 public class EditDr extends javax.swing.JDialog {
-    
+
     public EditDr(java.awt.Frame parent, boolean modal, Doctor d) {
         super(parent, modal);
         initComponents();
         configureElements(d);
-        
+
     }
 
     private void configureElements(Doctor d) {
@@ -19,7 +21,7 @@ public class EditDr extends javax.swing.JDialog {
         idField.setText(d.getId());
         codUnidad.setText(d.getCodUnidad());
         spinnerExp.setValue(d.getExp());
-        
+
         idField.setEnabled(false);
         codUnidad.setEnabled(false);
     }
@@ -147,9 +149,6 @@ public class EditDr extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(192, 192, 192)
-                        .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(324, 324, 324)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
@@ -192,8 +191,13 @@ public class EditDr extends javax.swing.JDialog {
                 .addGap(81, 81, 81))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(198, 198, 198))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -261,7 +265,48 @@ public class EditDr extends javax.swing.JDialog {
     }//GEN-LAST:event_licenseFieldActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        boolean datosValidos = true;
+        String nombre = nameField.getText();
+        String telefono = telField.getText();
+        String especialidad = espField.getText();
+        String licencia = licenseField.getText();
+        int experiencia = (Integer) spinnerExp.getValue();
 
+        if (nombre.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío.", "Error", JOptionPane.WARNING_MESSAGE);
+            datosValidos = false;
+        }
+        if (datosValidos && telefono.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El teléfono no puede estar vacío.", "Error", JOptionPane.WARNING_MESSAGE);
+            datosValidos = false;
+        }
+        if (datosValidos && especialidad.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La especialidad no puede estar vacía.", "Error", JOptionPane.WARNING_MESSAGE);
+            datosValidos = false;
+        }
+        if (datosValidos && licencia.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La licencia no puede estar vacía.", "Error", JOptionPane.WARNING_MESSAGE);
+            datosValidos = false;
+        }
+
+        if (datosValidos) {
+            try {
+                DoctorDAO dao = new DoctorDAO();
+                dao.modificarDoctor(
+                        idField.getText(),
+                        nombre,
+                        telefono,
+                        especialidad,
+                        licencia,
+                        experiencia,
+                        codUnidad.getText()
+                );
+                JOptionPane.showMessageDialog(this, "Doctor modificado exitosamente.");
+                this.dispose();
+            } catch (RuntimeException ex) {
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void codUnidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codUnidadActionPerformed
