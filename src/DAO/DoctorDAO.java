@@ -73,10 +73,9 @@ public class DoctorDAO {
 
     public ArrayList<MedicoListado> listarMedicosReporte(String codHospital, String codDpt, String codUnidad) {
         ArrayList<MedicoListado> lista = new ArrayList<>();
-
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT h.nombreHosp AS hospital, d.nombreDpt AS departamento, u.nombreUnidad AS unidad, ");
-        sql.append("m.nombreMed, m.especialidad, m.numLicencia, m.telefono, m.experiencia ");
+        sql.append("m.nombreMed, m.especialidad, m.numLicencia, m.telefono, m.experiencia, m.codMedico ");
         sql.append("FROM Doctor m ");
         sql.append("JOIN Unidad u ON m.codUnidad = u.codUnidad ");
         sql.append("JOIN Departamento d ON u.codDpt = d.codDpt ");
@@ -118,7 +117,8 @@ public class DoctorDAO {
                         rs.getString("especialidad"),
                         rs.getString("numLicencia"),
                         rs.getString("telefono"),
-                        rs.getInt("experiencia")
+                        rs.getInt("experiencia"),
+                        rs.getString("codMedico")
                 ));
             }
         } catch (SQLException e) {
@@ -149,6 +149,72 @@ public class DoctorDAO {
             throw new RuntimeException("Error al listar doctores por unidad: " + e.getMessage(), e);
         }
         return lista;
+    }
+
+    public Doctor obtenerDoctorPorCodigo(String codMedico) {
+        String sql = "SELECT codMedico, nombreMed, telefono, especialidad, numLicencia, experiencia, codUnidad "
+                + "FROM Doctor WHERE codMedico = ?";
+        Doctor d = null;
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codMedico);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                d = new Doctor(
+                        rs.getString("nombreMed"),
+                        rs.getString("codMedico"),
+                        rs.getString("especialidad"),
+                        rs.getString("numLicencia"),
+                        rs.getString("telefono"),
+                        rs.getInt("experiencia"),
+                        rs.getString("codUnidad")
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener doctor: " + e.getMessage(), e);
+        }
+        return d;
+    }
+
+    public void modificarDoctor(String codMedico, String nombreMed, String telefono,
+            String especialidad, String numLicencia, int experiencia, String codUnidad) {
+        String sql = "SELECT modificar_medico(?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codMedico);
+            stmt.setString(2, nombreMed);
+            stmt.setString(3, telefono);
+            stmt.setString(4, especialidad);
+            stmt.setString(5, numLicencia);
+            stmt.setInt(6, experiencia);
+            stmt.setString(7, codUnidad);
+            stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al modificar doctor: " + e.getMessage(), e);
+        }
+    }
+
+    public void eliminarDoctor(String codMedico) {
+        String sql = "SELECT eliminar_medico(?)";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codMedico);
+            stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al eliminar doctor: " + e.getMessage(), e);
+        }
+    }
+
+    public int contarTurnosDeDoctor(String codMedico) {
+        int total = 0;
+        String sql = "SELECT COUNT(*) FROM Turno WHERE codMedico = ?";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codMedico);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                total = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al contar turnos del doctor: " + e.getMessage(), e);
+        }
+        return total;
     }
 
 }
