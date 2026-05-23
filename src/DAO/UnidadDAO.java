@@ -76,4 +76,62 @@ public class UnidadDAO {
         }
         return lista;
     }
+
+    public void eliminarUnidad(String codUnidad) {
+        String sql = "SELECT eliminar_unidad(?)";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al eliminar unidad: " + e.getMessage(), e);
+        }
+    }
+
+    public void modificarUnidad(String codUnidad, String nombre, String ubicacion, String codDpt) {
+        String sql = "SELECT modificar_unidad(?, ?, ?, ?)";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            stmt.setString(2, nombre);
+            stmt.setString(3, ubicacion);
+            stmt.setString(4, codDpt);
+            stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al modificar unidad: " + e.getMessage(), e);
+        }
+    }
+
+    public int contarMedicosEnUnidad(String codUnidad) {
+        int total = 0;
+        String sql = "SELECT COUNT(*) FROM Doctor WHERE codUnidad = ?";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                total = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al contar médicos: " + e.getMessage(), e);
+        }
+        return total;
+    }
+
+    public Unidad obtenerUnidadPorCodigo(String codUnidad) {
+        String sql = "SELECT codUnidad, nombreUnidad, ubicacion, codDpt FROM Unidad WHERE codUnidad = ?";
+        Unidad u = null;
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                u = new Unidad(
+                        rs.getString("nombreUnidad"),
+                        rs.getString("codUnidad"),
+                        rs.getString("ubicacion"),
+                        rs.getString("codDpt")
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener unidad: " + e.getMessage(), e);
+        }
+        return u;
+    }
 }
