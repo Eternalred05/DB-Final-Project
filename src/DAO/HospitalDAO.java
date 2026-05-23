@@ -101,4 +101,40 @@ public class HospitalDAO {
         }
         return lista;
     }
+
+    public void modificarHospital(String codHospital, String nuevoNombre) {
+        String sql = "SELECT modificar_hospital(?, ?)";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codHospital);
+            stmt.setString(2, nuevoNombre);
+            stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al modificar hospital: " + e.getMessage(), e);
+        }
+    }
+
+    public void eliminarHospital(String codHospital) {
+        String sql = "SELECT eliminar_hospital(?)";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codHospital);
+            stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al eliminar hospital: " + e.getMessage(), e);
+        }
+    }
+
+    public Hospital obtenerHospitalPorCodigo(String cod) {
+        String sql = "SELECT codHospital, nombreHosp FROM Hospital WHERE codHospital = ?";
+        Hospital h = null;
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, cod);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                h = new Hospital(rs.getString("nombreHosp"), rs.getString("codHospital"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener hospital: " + e.getMessage(), e);
+        }
+        return h;
+    }
 }

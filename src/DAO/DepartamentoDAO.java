@@ -40,7 +40,7 @@ public class DepartamentoDAO {
 
     public Departamento obtenerDptPorPosicion(int posicion) {
         Departamento h = null;
-        String sql = "SELECT codDpt, nombreDpt ,codHospital FROM Departamento ORDER BY nombreDpt LIMIT 1 OFFSET ?";
+        String sql = "SELECT codDpt, nombreDpt, codHospital FROM Departamento ORDER BY nombreDpt LIMIT 1 OFFSET ?";
         try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, posicion);
             ResultSet rs = stmt.executeQuery();
@@ -72,4 +72,59 @@ public class DepartamentoDAO {
         return lista;
     }
 
+    public void eliminarDepartamento(String codDpt) {
+        String sql = "SELECT eliminar_departamento(?)";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codDpt);
+            stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al eliminar departamento: " + e.getMessage(), e);
+        }
+    }
+
+    public Departamento obtenerDepartamentoPorCodigo(String codDpt) {
+        Departamento d = null;
+        String sql = "SELECT codDpt, nombreDpt, codHospital FROM Departamento WHERE codDpt = ?";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codDpt);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                d = new Departamento(
+                        rs.getString("nombreDpt"),
+                        rs.getString("codDpt"),
+                        rs.getString("codHospital")
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener departamento: " + e.getMessage(), e);
+        }
+        return d;
+    }
+
+    public int contarUnidadesPorDepartamento(String codDpt) {
+        int total = 0;
+        String sql = "SELECT COUNT(*) FROM Unidad WHERE codDpt = ?";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codDpt);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                total = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al contar unidades: " + e.getMessage(), e);
+        }
+        return total;
+    }
+
+    public void modificarDepartamento(String codDpt, String nombreDpt, String codHospital) {
+        String sql = "SELECT modificar_departamento(?, ?, ?)";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codDpt);
+            stmt.setString(2, nombreDpt);
+            stmt.setString(3, codHospital);
+            stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al modificar departamento: " + e.getMessage(), e);
+        }
+    }
 }

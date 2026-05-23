@@ -215,4 +215,29 @@ public class PacienteDAO {
         }
         return total;
     }
+
+    public Paciente obtenerPaciente(String codUnidad, String numHistClinica) {
+        String sql = "SELECT codUnidad, numHistClinica, nombrePac, direccion, nacimiento, atendido, causa "
+                + "FROM Paciente WHERE codUnidad = ? AND numHistClinica = ?";
+        Paciente p = null;
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            stmt.setString(2, numHistClinica);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                p = new Paciente(
+                        rs.getString("nombrePac"),
+                        rs.getString("numHistClinica"),
+                        rs.getString("direccion"),
+                        rs.getDate("nacimiento"),
+                        rs.getString("codUnidad"),
+                        rs.getBoolean("atendido"),
+                        rs.getString("causa")
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener paciente: " + e.getMessage(), e);
+        }
+        return p;
+    }
 }
