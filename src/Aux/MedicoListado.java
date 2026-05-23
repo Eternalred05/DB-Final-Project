@@ -10,10 +10,11 @@ public class MedicoListado {
     private String numLicencia;
     private String telefono;
     private int experiencia;
+    private String codMedico;
 
     public MedicoListado(String hospital, String departamento, String unidad,
             String nombreMed, String especialidad, String numLicencia,
-            String telefono, int experiencia) {
+            String telefono, int experiencia, String codMedico) {
         this.hospital = hospital;
         this.departamento = departamento;
         this.unidad = unidad;
@@ -22,6 +23,11 @@ public class MedicoListado {
         this.numLicencia = numLicencia;
         this.telefono = telefono;
         this.experiencia = experiencia;
+        this.codMedico = codMedico;
+    }
+
+    public String getCodMedico() {
+        return codMedico;
     }
 
     public String getHospital() {
