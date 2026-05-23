@@ -83,7 +83,7 @@ public class EditUnidad extends javax.swing.JDialog {
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel2.setText("Departamento al que pertenece la Unidad");
 
-        jButton1.setText("Añadir");
+        jButton1.setText("Editar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -116,9 +116,6 @@ public class EditUnidad extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -147,7 +144,10 @@ public class EditUnidad extends javax.swing.JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(193, 193, 193)
                                 .addComponent(jLabel2)))
-                        .addGap(0, 162, Short.MAX_VALUE)))
+                        .addGap(0, 162, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -171,8 +171,8 @@ public class EditUnidad extends javax.swing.JDialog {
                 .addComponent(jLabel2)
                 .addGap(12, 12, 12)
                 .addComponent(dptField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(62, 62, 62)
-                .addComponent(jButton1)
+                .addGap(53, 53, 53)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -188,7 +188,26 @@ public class EditUnidad extends javax.swing.JDialog {
     }//GEN-LAST:event_idFieldActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String name = nameField.getText();
+        String address = addField.getText();
+        String codDpt = dptField.getText();
+        String id = idField.getText();
+        boolean datosValidos = true;
+        if (name.isEmpty() || address.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Complete todos los campos.");
+            datosValidos = false;
+        }
 
+        if (datosValidos) {
+            try {
+                UnidadDAO dao = new UnidadDAO();
+                dao.modificarUnidad(id, name, address, codDpt);
+                JOptionPane.showMessageDialog(this, "Unidad modificada exitosamente.");
+                this.dispose();
+            } catch (RuntimeException ex) {
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
