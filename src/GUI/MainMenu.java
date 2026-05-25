@@ -5,6 +5,7 @@
 package GUI;
 
 import GUI.AddUnidadGUI;
+import GUI.EditComponents.EditTurno;
 import Runner.Login;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -264,6 +265,11 @@ public class MainMenu extends javax.swing.JFrame {
         jMenu2.add(jMenuItem22);
 
         jMenuItem23.setText("Lista de Turnos");
+        jMenuItem23.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem23ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem23);
 
         jMenuBar1.add(jMenu2);
@@ -551,7 +557,7 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     private void jMenuItem22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem22ActionPerformed
-       try {
+        try {
             ListadoUnidad ah = new ListadoUnidad(this, true);
             ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             ah.setLocationRelativeTo(null);
@@ -560,6 +566,17 @@ public class MainMenu extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }//GEN-LAST:event_jMenuItem22ActionPerformed
+
+    private void jMenuItem23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem23ActionPerformed
+        try {
+            ListarTurnos ah = new ListarTurnos(this, true);
+            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            ah.setLocationRelativeTo(null);
+            ah.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jMenuItem23ActionPerformed
 
     /**
      * @param args the command line arguments

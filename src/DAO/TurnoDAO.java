@@ -1,5 +1,6 @@
 package DAO;
 
+import Aux.TurnoListado;
 import java.sql.*;
 import Connection.ConnectionManager;
 import Logic.Turno;
@@ -60,6 +61,7 @@ public class TurnoDAO {
     }
 
     public Turno obtenerTurno(String codUnidad, int numTurno) {
+        Turno t = null;
         String sql = "SELECT numTurno, cantPacientes, pacientesAtend, codMedico, codUnidad "
                 + "FROM Turno WHERE codUnidad = ? AND numTurno = ?";
         try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -67,7 +69,7 @@ public class TurnoDAO {
             stmt.setInt(2, numTurno);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new Turno(
+                t = new Turno(
                         rs.getInt("numTurno"),
                         rs.getInt("cantPacientes"),
                         rs.getInt("pacientesAtend"),
@@ -78,6 +80,78 @@ public class TurnoDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Turno no encontrado: " + e.getMessage());
         }
-        return null;
+        return t;
+    }
+
+    public ArrayList<TurnoListado> listarTurnos() {
+        ArrayList<TurnoListado> lista = new ArrayList<>();
+        String sql = "SELECT h.nombreHosp AS hospital, d.nombreDpt AS departamento, u.nombreUnidad AS unidad, "
+                + "t.numTurno, t.cantPacientes, t.pacientesAtend, m.nombreMed AS medico, t.codMedico, t.codUnidad "
+                + "FROM Turno t "
+                + "JOIN Doctor m ON t.codMedico = m.codMedico "
+                + "JOIN Unidad u ON t.codUnidad = u.codUnidad "
+                + "JOIN Departamento d ON u.codDpt = d.codDpt "
+                + "JOIN Hospital h ON d.codHospital = h.codHospital "
+                + "ORDER BY u.nombreUnidad, t.numTurno";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                lista.add(new TurnoListado(
+                        rs.getString("hospital"),
+                        rs.getString("departamento"),
+                        rs.getString("unidad"),
+                        rs.getInt("numTurno"),
+                        rs.getInt("cantPacientes"),
+                        rs.getInt("pacientesAtend"),
+                        rs.getString("medico"),
+                        rs.getString("codMedico"),
+                        rs.getString("codUnidad")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al listar turnos: " + e.getMessage(), e);
+        }
+        return lista;
+    }
+
+    public void modificarTurno(String codUnidad, int numTurno, int cantPacientes,
+            int pacientesAtend, String codMedico) {
+        String sql = "SELECT modificar_turno(?, ?, ?, ?, ?)";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            stmt.setInt(2, numTurno);
+            stmt.setInt(3, cantPacientes);
+            stmt.setInt(4, pacientesAtend);
+            stmt.setString(5, codMedico);
+            stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al modificar turno: " + e.getMessage(), e);
+        }
+    }
+
+    public void eliminarTurno(String codUnidad, int numTurno) {
+        String sql = "SELECT eliminar_turno(?, ?)";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            stmt.setInt(2, numTurno);
+            stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al eliminar turno: " + e.getMessage(), e);
+        }
+    }
+
+    public int contarInformesDeTurno(String codUnidad, int numTurno) {
+        int total = 0;
+        String sql = "SELECT COUNT(*) FROM Informe WHERE codUnidad = ? AND numTurno = ?";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            stmt.setInt(2, numTurno);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                total = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al contar informes: " + e.getMessage(), e);
+        }
+        return total;
     }
 }

@@ -10,24 +10,26 @@ public class EditTurno extends javax.swing.JDialog {
     private UnidadDAO unidadDAO = new UnidadDAO();
     private DoctorDAO doctorDAO = new DoctorDAO();
     private TurnoDAO turnoDAO = new TurnoDAO();
+    private Turno turnoOriginal;
 
     public EditTurno(java.awt.Frame parent, boolean modal, Turno t) {
         super(parent, modal);
         setTitle("Editar Turno");
-        initComponents(); 
+        initComponents();
         configureElements(t);
     }
 
-   private void configureElements(Turno t){
-       unidadField.setText(t.getCodUnidad());
-       unidadField.setEnabled(false);
-       medField.setText(t.getCodMedico());
-       medField.setEnabled(false);
-       txtNumTurno.setText(String.valueOf(t.getNumTurno()));
-       txtNumTurno.setEnabled(false);
-       spinnerAsig.setValue(t.getCantPacientes());
-       
-   }
+    private void configureElements(Turno t) {
+        this.turnoOriginal = t;
+        unidadField.setText(t.getCodUnidad());
+        unidadField.setEnabled(false);
+        medField.setText(t.getCodMedico());
+        medField.setEnabled(false);
+        txtNumTurno.setText(String.valueOf(t.getNumTurno()));
+        txtNumTurno.setEnabled(false);
+        spinnerAsig.setValue(t.getCantPacientes());
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -157,7 +159,36 @@ public class EditTurno extends javax.swing.JDialog {
     }//GEN-LAST:event_txtNumTurnoActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int nuevaCantidad = (Integer) spinnerAsig.getValue();
+        int pacientesAtendidos = turnoOriginal.getPacientesAtend();
 
+        boolean datosValidos = true;
+
+        if (nuevaCantidad < pacientesAtendidos) {
+            JOptionPane.showMessageDialog(this,
+                    "No se puede asignar menos pacientes (" + nuevaCantidad
+                    + ") que los ya atendidos (" + pacientesAtendidos + ").",
+                    "Valor no permitido", JOptionPane.WARNING_MESSAGE);
+            datosValidos = false;
+        }
+
+        if (datosValidos) {
+            try {
+                turnoDAO.modificarTurno(
+                        turnoOriginal.getCodUnidad(),
+                        turnoOriginal.getNumTurno(),
+                        nuevaCantidad,
+                        pacientesAtendidos,
+                        turnoOriginal.getCodMedico()
+                );
+                JOptionPane.showMessageDialog(this, "Turno modificado exitosamente.");
+                this.dispose();
+            } catch (RuntimeException ex) {
+                JOptionPane.showMessageDialog(this,
+                        "Error al modificar: " + ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void medFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_medFieldActionPerformed
