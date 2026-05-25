@@ -6,6 +6,7 @@ package GUI;
 
 import GUI.AddUnidadGUI;
 import GUI.EditComponents.EditTurno;
+import Logic.Usuario;
 import Runner.Login;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -19,9 +20,12 @@ public class MainMenu extends javax.swing.JFrame {
     /**
      * Creates new form MainMenu
      */
-    public MainMenu() {
+    public MainMenu(Usuario u) {
         initComponents();
         setLocationRelativeTo(null);
+        if(!u.isAdmin()){
+            jMenu1.setEnabled(false);
+        }
     }
 
     /**
@@ -608,7 +612,7 @@ public class MainMenu extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainMenu().setVisible(true);
+                new MainMenu(null).setVisible(true);
             }
         });
     }

@@ -4,8 +4,11 @@
  */
 package Runner;
 
+import DAO.UsuarioDAO;
 import GUI.MainMenu;
 import java.awt.event.ItemEvent;
+import Logic.Usuario;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,7 +21,7 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
-       
+
         passwordField.setEchoChar('\u2022');
         passCheck.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -147,12 +150,31 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_userFieldActionPerformed
 
     private void accessButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accessButtonActionPerformed
-        String password = passwordField.getText();
-        String user = userField.getText();
+        String contrasena = passwordField.getText();
+        String usuario = userField.getText();
 
-        MainMenu menu = new MainMenu();
-        menu.setVisible(true);
-        this.dispose();
+        boolean accesoConcedido = false;
+        boolean esAdmin = false;
+        String nombreUsuario = "";
+
+        UsuarioDAO dao = new UsuarioDAO();
+        try {
+            Usuario user = dao.autenticar(usuario, contrasena);
+            if (user != null) {
+                accesoConcedido = true;
+                esAdmin = user.isAdmin();
+                nombreUsuario = user.getNombre();
+                if (accesoConcedido) {
+                    MainMenu menu = new MainMenu(user);
+                    menu.setVisible(true);
+                    this.dispose();
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.", "Acceso denegado", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al conectar con la base de datos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
 
 
     }//GEN-LAST:event_accessButtonActionPerformed
