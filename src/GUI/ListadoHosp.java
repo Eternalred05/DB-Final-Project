@@ -22,12 +22,16 @@ public class ListadoHosp extends javax.swing.JDialog {
 
     private HospitalDAO hospitalDAO = new HospitalDAO();
 
-    public ListadoHosp(java.awt.Frame parent, boolean modal) {
+    public ListadoHosp(java.awt.Frame parent, boolean modal, Usuario u) {
         super(parent, modal);
         initComponents();
         setTitle("Listado de Hospitales");
         configurarTabla();
         cargarTabla();
+        if (!u.isAdmin()) {
+            jButton2.setEnabled(false);
+            jButton3.setEnabled(false);
+        }
     }
 
     private void configurarTabla() {
@@ -212,7 +216,7 @@ public class ListadoHosp extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ListadoHosp dialog = new ListadoHosp(new javax.swing.JFrame(), true);
+                ListadoHosp dialog = new ListadoHosp(new javax.swing.JFrame(), true, new Usuario(000, "Prueba", "Prueba", "123", true));
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

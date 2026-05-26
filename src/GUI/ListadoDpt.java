@@ -22,12 +22,16 @@ public class ListadoDpt extends javax.swing.JDialog {
      */
     private DepartamentoDAO departamentoDAO = new DepartamentoDAO();
 
-    public ListadoDpt(java.awt.Frame parent, boolean modal) {
+    public ListadoDpt(java.awt.Frame parent, boolean modal, Usuario u) {
         super(parent, modal);
         initComponents();
         setTitle("Listado de Departamentos");
         configurarTabla();
         cargarTabla();
+        if (!u.isAdmin()) {
+            jButton2.setEnabled(false);
+            jButton3.setEnabled(false);
+        }
     }
 
     private void configurarTabla() {
@@ -216,7 +220,7 @@ public class ListadoDpt extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ListadoDpt dialog = new ListadoDpt(new javax.swing.JFrame(), true);
+                ListadoDpt dialog = new ListadoDpt(new javax.swing.JFrame(), true, new Usuario(000, "Prueba", "Prueba", "123", true));
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

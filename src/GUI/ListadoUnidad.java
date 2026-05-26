@@ -20,12 +20,16 @@ public class ListadoUnidad extends JDialog {
 
     private UnidadDAO unidadDAO = new UnidadDAO();
 
-    public ListadoUnidad(java.awt.Frame parent, boolean modal) {
+    public ListadoUnidad(java.awt.Frame parent, boolean modal, Usuario u) {
         super(parent, modal);
         setTitle("Listado de Unidades");
         initComponents();
         configurarTabla();
         cargarTabla();
+        if (!u.isAdmin()) {
+            jButton1.setEnabled(false);
+            jButton2.setEnabled(false);
+        }
 
     }
 
@@ -233,7 +237,7 @@ public class ListadoUnidad extends JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ListadoUnidad dialog = new ListadoUnidad(new javax.swing.JFrame(), true);
+                ListadoUnidad dialog = new ListadoUnidad(new javax.swing.JFrame(), true, new Usuario(000, "Prueba", "Prueba", "123", true));
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

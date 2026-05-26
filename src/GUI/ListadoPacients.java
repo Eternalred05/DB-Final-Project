@@ -15,13 +15,17 @@ public class ListadoPacients extends javax.swing.JDialog {
     private UnidadDAO unidadDAO = new UnidadDAO();
     private PacienteDAO pacienteDAO = new PacienteDAO();
 
-    public ListadoPacients(java.awt.Frame parent, boolean modal) {
+    public ListadoPacients(java.awt.Frame parent, boolean modal, Usuario u) {
         super(parent, modal);
         initComponents();
         setTitle("Listado de Pacientes");
         configurarTabla();
         cargarHospitales();
         configurarEventos();
+        if (!u.isAdmin()) {
+            bajaButton.setEnabled(false);
+            modButton.setEnabled(false);
+        }
 
     }
 
@@ -128,8 +132,8 @@ public class ListadoPacients extends javax.swing.JDialog {
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaPacientes = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        bajaButton = new javax.swing.JButton();
+        modButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -165,17 +169,17 @@ public class ListadoPacients extends javax.swing.JDialog {
         ));
         jScrollPane1.setViewportView(tablaPacientes);
 
-        jButton2.setText("Dar de Baja");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        bajaButton.setText("Dar de Baja");
+        bajaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                bajaButtonActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Modificar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        modButton.setText("Modificar");
+        modButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                modButtonActionPerformed(evt);
             }
         });
 
@@ -202,9 +206,9 @@ public class ListadoPacients extends javax.swing.JDialog {
                         .addGap(123, 123, 123))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(225, 225, 225)
-                .addComponent(jButton2)
+                .addComponent(bajaButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3)
+                .addComponent(modButton)
                 .addGap(138, 138, 138)
                 .addComponent(jButton1)
                 .addContainerGap())
@@ -234,8 +238,8 @@ public class ListadoPacients extends javax.swing.JDialog {
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton2)
-                            .addComponent(jButton3))
+                            .addComponent(bajaButton)
+                            .addComponent(modButton))
                         .addGap(19, 19, 19))))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -264,7 +268,7 @@ public class ListadoPacients extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void bajaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bajaButtonActionPerformed
         int filas = tablaPacientes.getSelectedRows().length;
         if (filas != 1) {
             JOptionPane.showMessageDialog(null, "Seleccione solo un paciente", "Error al escoger un paciente", HEIGHT);
@@ -288,9 +292,9 @@ public class ListadoPacients extends javax.swing.JDialog {
                 }
             }
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_bajaButtonActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void modButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modButtonActionPerformed
 
         boolean exists = false;
         int filasSeleccionadas = tablaPacientes.getSelectedRows().length;
@@ -331,7 +335,7 @@ public class ListadoPacients extends javax.swing.JDialog {
             }
         }
 
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_modButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -364,7 +368,7 @@ public class ListadoPacients extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ListadoPacients dialog = new ListadoPacients(new javax.swing.JFrame(), true);
+                ListadoPacients dialog = new ListadoPacients(new javax.swing.JFrame(), true, new Usuario(000, "Prueba", "Prueba", "123", true));
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -377,16 +381,16 @@ public class ListadoPacients extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bajaButton;
     private javax.swing.JComboBox<Object> comboDepartamento;
     private javax.swing.JComboBox<Object> comboHospital;
     private javax.swing.JComboBox<Object> comboUnidad;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton modButton;
     private javax.swing.JTable tablaPacientes;
     // End of variables declaration//GEN-END:variables
 }

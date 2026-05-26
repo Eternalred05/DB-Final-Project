@@ -15,14 +15,17 @@ public class ListadoDr extends javax.swing.JDialog {
     private UnidadDAO unidadDAO = new UnidadDAO();
     private DoctorDAO doctorDAO = new DoctorDAO();
 
-    public ListadoDr(java.awt.Frame parent, boolean modal) {
+    public ListadoDr(java.awt.Frame parent, boolean modal, Usuario u) {
         super(parent, modal);
         initComponents();
         setTitle("Listado de Doctores");
         configurarTabla();
         cargarHospitales();
         configurarEventos();
-
+        if (!u.isAdmin()) {
+            jButton3.setEnabled(false);
+            jButton2.setEnabled(false);
+        }
     }
 
     private void configurarTabla() {
@@ -377,7 +380,7 @@ public class ListadoDr extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ListadoPacients dialog = new ListadoPacients(new javax.swing.JFrame(), true);
+                ListadoDr dialog = new ListadoDr(new javax.swing.JFrame(), true, new Usuario(000, "Prueba", "Prueba", "123", true));
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

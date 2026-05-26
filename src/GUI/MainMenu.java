@@ -17,13 +17,16 @@ import javax.swing.JOptionPane;
  */
 public class MainMenu extends javax.swing.JFrame {
 
+    private Usuario u;
+
     /**
      * Creates new form MainMenu
      */
-    public MainMenu(Usuario u) {
+    public MainMenu(Usuario user) {
         initComponents();
         setLocationRelativeTo(null);
-        if(!u.isAdmin()){
+        u = user;
+        if (!u.isAdmin()) {
             jMenu1.setEnabled(false);
         }
     }
@@ -382,7 +385,7 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
         try {
-            ListadoPacients ah = new ListadoPacients(this, true);
+            ListadoPacients ah = new ListadoPacients(this, true, u);
             ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             ah.setLocationRelativeTo(null);
             ah.setVisible(true);
@@ -393,7 +396,7 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
         try {
-            ListadoDr ah = new ListadoDr(this, true);
+            ListadoDr ah = new ListadoDr(this, true, u);
             ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             ah.setLocationRelativeTo(null);
             ah.setVisible(true);
@@ -531,11 +534,10 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void jMenuItem21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem21ActionPerformed
         try {
-            ListadoDpt ah = new ListadoDpt(this, true);
+            ListadoDpt ah = new ListadoDpt(this, true, u);
             ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             ah.setLocationRelativeTo(null);
             ah.setVisible(true);
-            this.dispose();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -551,7 +553,7 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
         try {
-            ListadoHosp ah = new ListadoHosp(this, true);
+            ListadoHosp ah = new ListadoHosp(this, true, u);
             ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             ah.setLocationRelativeTo(null);
             ah.setVisible(true);
@@ -562,7 +564,7 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void jMenuItem22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem22ActionPerformed
         try {
-            ListadoUnidad ah = new ListadoUnidad(this, true);
+            ListadoUnidad ah = new ListadoUnidad(this, true, u);
             ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             ah.setLocationRelativeTo(null);
             ah.setVisible(true);
@@ -573,7 +575,7 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void jMenuItem23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem23ActionPerformed
         try {
-            ListarTurnos ah = new ListarTurnos(this, true);
+            ListarTurnos ah = new ListarTurnos(this, true, u);
             ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             ah.setLocationRelativeTo(null);
             ah.setVisible(true);

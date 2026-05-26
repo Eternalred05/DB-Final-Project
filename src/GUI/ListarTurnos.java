@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import Logic.Turno;
+import Logic.Usuario;
 
 /**
  *
@@ -16,12 +17,16 @@ public class ListarTurnos extends javax.swing.JDialog {
 
     private TurnoDAO turnoDAO = new TurnoDAO();
 
-    public ListarTurnos(java.awt.Frame parent, boolean modal) {
+    public ListarTurnos(java.awt.Frame parent, boolean modal, Usuario u) {
         super(parent, modal);
         initComponents();
         setTitle("Listado de Turnos");
         configurarTabla();
         cargarTabla();
+        if (!u.isAdmin()) {
+            jButton2.setEnabled(false);
+            jButton3.setEnabled(false);
+        }
     }
 
     private void configurarTabla() {
@@ -226,7 +231,7 @@ public class ListarTurnos extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ListarTurnos dialog = new ListarTurnos(new javax.swing.JFrame(), true);
+                ListarTurnos dialog = new ListarTurnos(new javax.swing.JFrame(), true, new Usuario(000, "Prueba", "Prueba", "123", true));
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
