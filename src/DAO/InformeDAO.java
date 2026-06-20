@@ -30,6 +30,17 @@ public class InformeDAO {
         }
     }
 
+    public void eliminarInforme(String codUnidad, int numInforme) {
+        String sql = "SELECT eliminar_informe(?, ?)";
+        try (Connection conn = ConnectionManager.getInstance().retrieveConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, codUnidad);
+            stmt.setInt(2, numInforme);
+            stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al eliminar el informe: " + e.getMessage(), e);
+        }
+    }
+
     public int obtenerUltimoNumeroInforme(String codUnidad, int numTurno) {
         String sql = "SELECT COALESCE(MAX(numInforme), 0) AS ultimo FROM Informe WHERE codUnidad = ? AND numTurno = ?";
         int ultimo = 0;
@@ -65,7 +76,7 @@ public class InformeDAO {
     public ArrayList<TurnoLista> informeDuranteConsultas(String codHospital, String codDpt, String codUnidad) {
         ArrayList<TurnoLista> lista = new ArrayList<>();
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT h.nombreHosp AS hospital, d.nombreDpt AS departamento, u.nombreUnidad AS unidad, ");
+        sql.append("SELECT h.nombreHosp AS hospital, d.nombreDpt AS departamento, u.nombreUnidad AS unidad, u.codUnidad AS codigoU, ");
         sql.append("t.numTurno, CAST(i.hora AS VARCHAR(5)) AS hora_informe, i.numInforme, ");
         sql.append("t.cantPacientes AS pacientes_inicio, i.pacientesAdmit, i.pacientesAlta, ");
         sql.append("i.pacientesAtendInf AS atendidos_desde_anterior, ");
@@ -114,7 +125,8 @@ public class InformeDAO {
                         rs.getInt("pacientesAdmit"),
                         rs.getInt("pacientesAlta"),
                         rs.getInt("atendidos_desde_anterior"),
-                        rs.getInt("atendidos_dia")
+                        rs.getInt("atendidos_dia"),
+                        rs.getString("codigoU")
                 ));
             }
         } catch (SQLException e) {
@@ -136,9 +148,9 @@ public class InformeDAO {
         sql.append("(t.cantPacientes - t.pacientesAtend) AS no_atendidos, ");
         sql.append("COALESCE(MAX(i.pacientesAlta),0) AS altas, ");
         sql.append("(SELECT COUNT(*) FROM Paciente p WHERE p.codUnidad = u.codUnidad AND p.atendido = FALSE AND p.causa ILIKE '%extranjero%') AS extranjero, ");
-        sql.append("(SELECT COUNT(*) FROM Paciente p WHERE p.codUnidad = u.codUnidad AND p.atendido = FALSE AND p.causa ILIKE '%fuera de la provincia%') AS fuera_provincia, ");
+        sql.append("(SELECT COUNT(*) FROM Paciente p WHERE p.codUnidad = u.codUnidad AND p.atendido = FALSE AND p.causa ILIKE '%fuera de provincia%') AS fuera_provincia, ");
         sql.append("(SELECT COUNT(*) FROM Paciente p WHERE p.codUnidad = u.codUnidad AND p.atendido = FALSE AND p.causa ILIKE '%hospitalizado en otra unidad%') AS hospitalizados, ");
-        sql.append("(SELECT COUNT(*) FROM Paciente p WHERE p.codUnidad = u.codUnidad AND p.atendido = FALSE AND p.causa IS NOT NULL AND p.causa NOT ILIKE ANY(ARRAY['%extranjero%','%fuera de la provincia%','%hospitalizado en otra unidad%'])) AS otras_causas, ");
+        sql.append("(SELECT COUNT(*) FROM Paciente p WHERE p.codUnidad = u.codUnidad AND p.atendido = FALSE AND p.causa IS NOT NULL AND p.causa NOT ILIKE ANY(ARRAY['%extranjero%','%fuera de provincia%','%hospitalizado en otra unidad%'])) AS otras_causas, ");
         sql.append("(SELECT COUNT(*) FROM Paciente p WHERE p.codUnidad = u.codUnidad AND p.atendido = FALSE AND p.causa IS NULL) AS desconocida ");
         sql.append("FROM Turno t ");
         sql.append("JOIN Unidad u ON t.codUnidad = u.codUnidad ");
