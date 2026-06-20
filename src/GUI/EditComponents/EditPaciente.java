@@ -106,6 +106,9 @@ public class EditPaciente extends javax.swing.JDialog {
             }
         });
 
+        jDateChooser.setMaxSelectableDate(new java.util.Date(4102466508000L));
+        jDateChooser.setMinSelectableDate(new java.util.Date(-2208967092000L));
+
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel5.setText("Número de Historia Clínica");
 

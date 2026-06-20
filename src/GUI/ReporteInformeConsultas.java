@@ -38,7 +38,7 @@ public class ReporteInformeConsultas extends javax.swing.JDialog {
 
     private void configurarTabla() {
         String[] cols = {"Hospital", "Depto", "Unidad", "Turno", "Hora inf.", "Nº Inf.",
-            "Pac. inicio", "Admitidos", "Altas", "Atend. desde ant.", "Atend. día"};
+            "Pac. inicio", "Admitidos", "Altas", "Atend. desde ant.", "Atend. día", "codUnidad"};
         DefaultTableModel model = new DefaultTableModel(cols, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -47,6 +47,10 @@ public class ReporteInformeConsultas extends javax.swing.JDialog {
         };
         tablaInforme.setModel(model);
         tablaInforme.getTableHeader().setReorderingAllowed(false);
+
+        tablaInforme.getColumnModel().getColumn(11).setMinWidth(0);
+        tablaInforme.getColumnModel().getColumn(11).setMaxWidth(0);
+        tablaInforme.getColumnModel().getColumn(11).setWidth(0);
     }
 
     private void cargarHospitales() {
@@ -104,7 +108,6 @@ public class ReporteInformeConsultas extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaInforme = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -147,8 +150,6 @@ public class ReporteInformeConsultas extends javax.swing.JDialog {
             }
         });
 
-        jButton3.setText("Modificar");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -169,15 +170,12 @@ public class ReporteInformeConsultas extends javax.swing.JDialog {
                         .addComponent(comboDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(47, 47, 47)
                         .addComponent(comboUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(123, 123, 123))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(225, 225, 225)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3)
-                .addGap(138, 138, 138)
-                .addComponent(jButton1)
-                .addContainerGap())
+                        .addGap(123, 123, 123))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addGap(358, 358, 358)
+                        .addComponent(jButton1)
+                        .addContainerGap())))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
@@ -197,16 +195,11 @@ public class ReporteInformeConsultas extends javax.swing.JDialog {
                     .addComponent(comboHospital, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(comboUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(comboDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 456, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton2)
-                            .addComponent(jButton3))
-                        .addGap(19, 19, 19))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 464, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addContainerGap(160, Short.MAX_VALUE)
@@ -236,8 +229,9 @@ public class ReporteInformeConsultas extends javax.swing.JDialog {
                     tl.getNumTurno(), tl.getHoraInforme(), tl.getNumInforme(),
                     tl.getPacientesInicio(), tl.getPacientesAdmitidos(),
                     tl.getPacientesAlta(), tl.getPacientesAtendidosDesdeAnterior(),
-                    tl.getPacientesAtendidosDia()
+                    tl.getPacientesAtendidosDia(),tl.getCodUnidad()
                 });
+
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -246,7 +240,31 @@ public class ReporteInformeConsultas extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        int filas = tablaInforme.getSelectedRows().length;       
+        
+        if (filas != 1) {
+            JOptionPane.showMessageDialog(null, "Seleccione solo un informe", "Error al escoger un", HEIGHT);
+        } else {
+            int fila = tablaInforme.getSelectedRow();
+          
+            DefaultTableModel model = (DefaultTableModel) tablaInforme.getModel();
+            int numInforme = (Integer)model.getValueAt(fila, 5);
+            System.err.println(model.getColumnName(11));
+            String codUnidad = model.getValueAt(fila, 11).toString();
+
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "¿Eliminar el informe " + numInforme,
+                    "Confirmar borrado", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                try {
+                    informeDAO.eliminarInforme(codUnidad, numInforme);
+                    JOptionPane.showMessageDialog(this, "Informe " + numInforme + "eliminado.");
+                    jButton1ActionPerformed(null);
+                } catch (RuntimeException ex) {
+                    JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -297,7 +315,6 @@ public class ReporteInformeConsultas extends javax.swing.JDialog {
     private javax.swing.JComboBox<Object> comboUnidad;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
