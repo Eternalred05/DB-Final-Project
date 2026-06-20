@@ -13,12 +13,13 @@ public class TurnoLista {
     private int pacientesAlta;
     private int pacientesAtendidosDesdeAnterior;
     private int pacientesAtendidosDia;
+    private String codUnidad;
 
     public TurnoLista(String hospital, String departamento, String unidad,
             int numTurno, String horaInforme, int numInforme,
             int pacientesInicio, int pacientesAdmitidos,
             int pacientesAlta, int pacientesAtendidosDesdeAnterior,
-            int pacientesAtendidosDia) {
+            int pacientesAtendidosDia, String codUnidad) {
         this.hospital = hospital;
         this.departamento = departamento;
         this.unidad = unidad;
@@ -30,10 +31,15 @@ public class TurnoLista {
         this.pacientesAlta = pacientesAlta;
         this.pacientesAtendidosDesdeAnterior = pacientesAtendidosDesdeAnterior;
         this.pacientesAtendidosDia = pacientesAtendidosDia;
+        this.codUnidad = codUnidad;
     }
 
     public String getHospital() {
         return hospital;
+    }
+
+    public String getCodUnidad() {
+        return codUnidad;
     }
 
     public String getDepartamento() {
