@@ -4,6 +4,14 @@
  */
 package GUI;
 
+import DAO.DepartamentoDAO;
+import DAO.DoctorDAO;
+import DAO.HospitalDAO;
+import DAO.InformeDAO;
+import DAO.PacienteDAO;
+import DAO.TurnoDAO;
+import DAO.UnidadDAO;
+import Logic.Doctor;
 import Logic.Usuario;
 import Runner.Login;
 import java.awt.BorderLayout;
@@ -369,24 +377,35 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        try {
-            AddDepartment ah = new AddDepartment(this, true);
-            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            ah.setLocationRelativeTo(null);
-            ah.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
+        HospitalDAO dao = new HospitalDAO();
+        if (!dao.listarHospitales().isEmpty()) {
+            try {
+                AddDepartment ah = new AddDepartment(this, true);
+                ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                ah.setLocationRelativeTo(null);
+                ah.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay Hospitales donde ingresar un departamento", "No hay Hospitales ingresados", JOptionPane.INFORMATION_MESSAGE);
         }
+
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        try {
-            AddDoctorGUI ah = new AddDoctorGUI(this, true);
-            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            ah.setLocationRelativeTo(null);
-            ah.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
+        UnidadDAO dao = new UnidadDAO();
+        if (!dao.listarUnidades().isEmpty()) {
+            try {
+                AddDoctorGUI ah = new AddDoctorGUI(this, true);
+                ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                ah.setLocationRelativeTo(null);
+                ah.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay Unidades donde ingresar un doctor", "No hay Unidades ingresadas", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
@@ -399,80 +418,109 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        try {
-            AddUnidadGUI ah = new AddUnidadGUI(this, true);
-            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            ah.setLocationRelativeTo(null);
-            ah.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
+        DepartamentoDAO dao = new DepartamentoDAO();
+        if (!dao.listarDpt().isEmpty()) {
+            try {
+                AddUnidadGUI ah = new AddUnidadGUI(this, true);
+                ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                ah.setLocationRelativeTo(null);
+                ah.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay Departamentos donde ingresar una unidad", "No hay Departamentos ingresados", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        try {
-            AddPacient ah = new AddPacient(this, true);
-            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            ah.setLocationRelativeTo(null);
-            ah.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        UnidadDAO dao = new UnidadDAO();
+        if (!dao.listarUnidades().isEmpty()) {
+            try {
+                AddPacient ah = new AddPacient(this, true);
+                ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                ah.setLocationRelativeTo(null);
+                ah.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            JOptionPane.showMessageDialog(null, "No hay Unidades donde ingresar un paciente", "No hay Unidades ingresadas", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
-        try {
-            ListadoPacients ah = new ListadoPacients(this, true, u);
-            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            ah.setLocationRelativeTo(null);
-            ah.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        PacienteDAO dao = new PacienteDAO();
+        if (!dao.listarPaciente().isEmpty()) {
+            try {
+                ListadoPacients ah = new ListadoPacients(this, true, u);
+                ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                ah.setLocationRelativeTo(null);
+                ah.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            JOptionPane.showMessageDialog(null, "No hay pacientes a mostrar", "No existen pacientes ingresados", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
-        try {
-            ListadoDr ah = new ListadoDr(this, true, u);
-            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            ah.setLocationRelativeTo(null);
-            ah.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        DoctorDAO dao = new DoctorDAO();
+        if (!dao.listarDrs().isEmpty()) {
+            try {
+                ListadoDr ah = new ListadoDr(this, true, u);
+                ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                ah.setLocationRelativeTo(null);
+                ah.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            JOptionPane.showMessageDialog(null, "No hay doctores a mostrar", "No existen doctores ingresados", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
-        try {
-            ResumenPorHospital ah = new ResumenPorHospital(this, true);
-            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            ah.setLocationRelativeTo(null);
-            ah.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        HospitalDAO dao = new HospitalDAO();
+        if (!dao.listarHospitales().isEmpty()) {
+            try {
+                ResumenPorHospital ah = new ResumenPorHospital(this, true);
+                ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                ah.setLocationRelativeTo(null);
+                ah.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            JOptionPane.showMessageDialog(null, "No hay Hospitales que mostrar", "No existen hospitales ingresados", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
-        try {
-            HospitalesConMasPacientes ah = new HospitalesConMasPacientes(this, true);
-            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            ah.setLocationRelativeTo(null);
-            ah.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        HospitalDAO dao = new HospitalDAO();
+        if (!dao.listarHospitales().isEmpty()) {
+            try {
+                HospitalesConMasPacientes ah = new HospitalesConMasPacientes(this, true);
+                ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                ah.setLocationRelativeTo(null);
+                ah.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            JOptionPane.showMessageDialog(null, "No hay Hospitales que mostrar", "No existen hospitales ingresados", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
-        try {
-            AddTurnoGUI ah = new AddTurnoGUI(this, true);
-            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            ah.setLocationRelativeTo(null);
-            ah.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        DoctorDAO dao = new DoctorDAO();
+        if (!dao.listarDrs().isEmpty()) {
+            try {
+                AddTurnoGUI ah = new AddTurnoGUI(this, true);
+                ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                ah.setLocationRelativeTo(null);
+                ah.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            JOptionPane.showMessageDialog(null, "No hay Doctores que puedan atender un turno", "No existen doctores ingresados", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
@@ -511,52 +559,70 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem16ActionPerformed
 
     private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
-        try {
-            ListadoPacientesNoAtend ah = new ListadoPacientesNoAtend(this, true);
-            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            ah.setLocationRelativeTo(null);
-            ah.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
+        PacienteDAO dao = new PacienteDAO();
+        if (!dao.listarPaciente().isEmpty()) {
+            try {
+                ListadoPacientesNoAtend ah = new ListadoPacientesNoAtend(this, true);
+                ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                ah.setLocationRelativeTo(null);
+                ah.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay pacientes que mostrar", "No existen pacientes ingresados", JOptionPane.INFORMATION_MESSAGE);
         }
 
     }//GEN-LAST:event_jMenuItem17ActionPerformed
 
     private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
-        try {
-            ResumenProc ah = new ResumenProc(this, true);
-            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            ah.setLocationRelativeTo(null);
-            ah.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
+        TurnoDAO dao = new TurnoDAO();
+        if (!dao.listarTurnos().isEmpty()) {
+            try {
+                ResumenProc ah = new ResumenProc(this, true);
+                ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                ah.setLocationRelativeTo(null);
+                ah.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay turnos que mostrar, por ende no se puede mostrar un resumen del proceso.", "No existen turnos ingresados", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jMenuItem18ActionPerformed
 
     private void jMenuItem19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem19ActionPerformed
-        try {
-            RevisarTurno ah = new RevisarTurno(this, true);
-            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            ah.setLocationRelativeTo(null);
-            ah.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
+        TurnoDAO dao = new TurnoDAO();
+        if (!dao.listarTurnos().isEmpty()) {
+            try {
+                RevisarTurno ah = new RevisarTurno(this, true);
+                ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                ah.setLocationRelativeTo(null);
+                ah.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay turnos que revisar", "No existen turnos ingresados", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jMenuItem19ActionPerformed
 
     private void jMenuItem20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem20ActionPerformed
-        try {
-            UnidadesExitosasGUI ah = new UnidadesExitosasGUI(this, true);
-            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            ah.setLocationRelativeTo(null);
-            ah.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        UnidadDAO dao = new UnidadDAO();
+        if (!dao.listarUnidades().isEmpty()) {
+            try {
+                UnidadesExitosasGUI ah = new UnidadesExitosasGUI(this, true);
+                ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                ah.setLocationRelativeTo(null);
+                ah.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            JOptionPane.showMessageDialog(null, "No hay unidades que mostrar", "No existen unidades ingresados", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItem20ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-
         try {
             Runner.Login ah = new Login();
             ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -566,18 +632,21 @@ public class MainMenu extends javax.swing.JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem21ActionPerformed
-        try {
-            ListadoDpt ah = new ListadoDpt(this, true, u);
-            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            ah.setLocationRelativeTo(null);
-            ah.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        DepartamentoDAO dao = new DepartamentoDAO();
+        if (!dao.listarDpt().isEmpty()) {
+            try {
+                ListadoDpt ah = new ListadoDpt(this, true, u);
+                ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                ah.setLocationRelativeTo(null);
+                ah.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            JOptionPane.showMessageDialog(null, "No hay departamentos que mostrar", "No existen departamentos ingresados", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItem21ActionPerformed
 
     private void jMenuItem12AncestorResized(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_jMenuItem12AncestorResized
@@ -589,36 +658,49 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu2ActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
-        try {
-            ListadoHosp ah = new ListadoHosp(this, true, u);
-            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            ah.setLocationRelativeTo(null);
-            ah.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        HospitalDAO dao = new HospitalDAO();
+        if (!dao.listarHospitales().isEmpty()) {
+            try {
+                ListadoHosp ah = new ListadoHosp(this, true, u);
+                ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                ah.setLocationRelativeTo(null);
+                ah.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } else
+            JOptionPane.showMessageDialog(null, "No hay Hospitales que mostrar", "No existen hospitales ingresados", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     private void jMenuItem22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem22ActionPerformed
-        try {
-            ListadoUnidad ah = new ListadoUnidad(this, true, u);
-            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            ah.setLocationRelativeTo(null);
-            ah.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        UnidadDAO dao = new UnidadDAO();
+        if (!dao.listarUnidades().isEmpty()) {
+            try {
+                ListadoUnidad ah = new ListadoUnidad(this, true, u);
+                ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                ah.setLocationRelativeTo(null);
+                ah.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            JOptionPane.showMessageDialog(null, "No hay unidades que mostrar", "No existen unidades ingresados", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItem22ActionPerformed
 
     private void jMenuItem23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem23ActionPerformed
-        try {
-            ListarTurnos ah = new ListarTurnos(this, true, u);
-            ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            ah.setLocationRelativeTo(null);
-            ah.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        TurnoDAO dao = new TurnoDAO();
+        if (!dao.listarTurnos().isEmpty()) {
+            try {
+                ListarTurnos ah = new ListarTurnos(this, true, u);
+                ah.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                ah.setLocationRelativeTo(null);
+                ah.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            JOptionPane.showMessageDialog(null, "No hay turnos que mostrar", "No existen turnos ingresados", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItem23ActionPerformed
 
     /**

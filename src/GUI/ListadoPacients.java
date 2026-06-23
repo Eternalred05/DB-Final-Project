@@ -271,7 +271,7 @@ public class ListadoPacients extends javax.swing.JDialog {
     private void bajaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bajaButtonActionPerformed
         int filas = tablaPacientes.getSelectedRows().length;
         if (filas != 1) {
-            JOptionPane.showMessageDialog(null, "Seleccione solo un paciente", "Error al escoger un paciente", HEIGHT);
+            JOptionPane.showMessageDialog(null, "Seleccione un paciente", "Error al escoger un paciente", HEIGHT);
         } else {
             int fila = tablaPacientes.getSelectedRow();
             DefaultTableModel model = (DefaultTableModel) tablaPacientes.getModel();

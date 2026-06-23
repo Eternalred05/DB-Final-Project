@@ -99,7 +99,7 @@ public class EditUnidad extends javax.swing.JDialog {
         });
 
         jLabel4.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jLabel4.setText("Ubicacion en el Hospital");
+        jLabel4.setText("Ubicación en el Hospital");
 
         dptField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         dptField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N

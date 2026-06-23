@@ -66,7 +66,7 @@ public class AddTurnoGUI extends javax.swing.JDialog {
         comboMedico.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         txtNumTurno.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtNumTurno.setLimit(8);
+        txtNumTurno.setLimit(20);
         txtNumTurno.setNumbers(false);
         txtNumTurno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

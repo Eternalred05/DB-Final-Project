@@ -122,6 +122,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Dialog" size="18" style="0"/>
         </Property>
+        <Property name="limit" type="int" value="45"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="nameFieldActionPerformed"/>
@@ -141,7 +142,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Dialog" size="18" style="0"/>
         </Property>
-        <Property name="limit" type="int" value="10"/>
+        <Property name="limit" type="int" value="11"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="idFieldActionPerformed"/>
@@ -183,6 +184,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Dialog" size="18" style="0"/>
         </Property>
+        <Property name="limit" type="int" value="45"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addFieldActionPerformed"/>
@@ -193,7 +195,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Dialog" size="18" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Ubicacion en el Hospital"/>
+        <Property name="text" type="java.lang.String" value="Ubicaci&#xf3;n en el Hospital"/>
       </Properties>
     </Component>
   </SubComponents>

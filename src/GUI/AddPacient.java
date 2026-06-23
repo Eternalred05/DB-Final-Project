@@ -73,6 +73,7 @@ public class AddPacient extends javax.swing.JDialog {
 
         name.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         name.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        name.setLimit(45);
         name.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nameActionPerformed(evt);
@@ -84,6 +85,7 @@ public class AddPacient extends javax.swing.JDialog {
 
         dir.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         dir.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        dir.setLimit(45);
         dir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dirActionPerformed(evt);
@@ -95,7 +97,7 @@ public class AddPacient extends javax.swing.JDialog {
 
         id.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         id.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        id.setLimit(10);
+        id.setLimit(11);
         id.setNumbers(false);
         id.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -190,8 +192,8 @@ public class AddPacient extends javax.swing.JDialog {
                 .addComponent(id, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -232,7 +234,7 @@ public class AddPacient extends javax.swing.JDialog {
         String codP = id.getText();
         String direccion = dir.getText();
         boolean atend = false;
-        String causa = "Ingresado Recientemente";
+        String causa = null;
         String codUnidad = "";
 
         if (!nom.isEmpty() && !codP.isEmpty() && !direccion.isEmpty() && jDateChooser.getDate() != null) {

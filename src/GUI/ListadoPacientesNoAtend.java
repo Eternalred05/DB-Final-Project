@@ -130,7 +130,6 @@ public class ListadoPacientesNoAtend extends javax.swing.JDialog {
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaNoAtendidos = new javax.swing.JTable();
-        jButton3 = new javax.swing.JButton();
         comboTurno = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         lblTotal = new javax.swing.JLabel();
@@ -169,8 +168,6 @@ public class ListadoPacientesNoAtend extends javax.swing.JDialog {
         ));
         jScrollPane1.setViewportView(tablaNoAtendidos);
 
-        jButton3.setText("Modificar");
-
         jLabel4.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Turno");
@@ -184,9 +181,7 @@ public class ListadoPacientesNoAtend extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(149, 149, 149)
                         .addComponent(jButton1))
@@ -241,7 +236,6 @@ public class ListadoPacientesNoAtend extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 464, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton3)
                     .addComponent(lblTotal))
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -359,7 +353,6 @@ public class ListadoPacientesNoAtend extends javax.swing.JDialog {
     private javax.swing.JComboBox<Object> comboTurno;
     private javax.swing.JComboBox<Object> comboUnidad;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

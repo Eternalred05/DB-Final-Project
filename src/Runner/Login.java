@@ -6,7 +6,6 @@ package Runner;
 
 import DAO.UsuarioDAO;
 import GUI.MainMenu;
-import java.awt.event.ItemEvent;
 import Logic.Usuario;
 import javax.swing.JOptionPane;
 
@@ -21,7 +20,7 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
- 
+
         passwordField.setEchoChar('\u2022');
         passCheck.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

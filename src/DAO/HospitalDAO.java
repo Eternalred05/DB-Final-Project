@@ -35,6 +35,7 @@ public class HospitalDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Error al listar hospitales: " + e.getMessage(), e);
         }
+
         return lista;
     }
 
@@ -137,4 +138,5 @@ public class HospitalDAO {
         }
         return h;
     }
+
 }

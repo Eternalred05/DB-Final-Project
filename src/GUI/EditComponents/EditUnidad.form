@@ -182,7 +182,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Dialog" size="18" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Ubicacion en el Hospital"/>
+        <Property name="text" type="java.lang.String" value="Ubicaci&#xf3;n en el Hospital"/>
       </Properties>
     </Component>
     <Component class="Utils.JTextFieldEdited" name="dptField">

@@ -69,6 +69,7 @@ public class AddUnidadGUI extends javax.swing.JDialog {
 
         nameField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         nameField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        nameField.setLimit(45);
         nameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nameFieldActionPerformed(evt);
@@ -80,7 +81,7 @@ public class AddUnidadGUI extends javax.swing.JDialog {
 
         idField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         idField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        idField.setLimit(10);
+        idField.setLimit(11);
         idField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 idFieldActionPerformed(evt);
@@ -106,6 +107,7 @@ public class AddUnidadGUI extends javax.swing.JDialog {
 
         addField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         addField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        addField.setLimit(45);
         addField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addFieldActionPerformed(evt);
@@ -113,7 +115,7 @@ public class AddUnidadGUI extends javax.swing.JDialog {
         });
 
         jLabel4.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jLabel4.setText("Ubicacion en el Hospital");
+        jLabel4.setText("Ubicación en el Hospital");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

@@ -144,7 +144,7 @@
     <Component class="Utils.JTextFieldEdited" name="txtNumTurno">
       <Properties>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="limit" type="int" value="8"/>
+        <Property name="limit" type="int" value="20"/>
         <Property name="numbers" type="boolean" value="false"/>
       </Properties>
       <Events>
